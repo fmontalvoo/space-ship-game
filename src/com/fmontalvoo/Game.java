@@ -1,6 +1,7 @@
 package com.fmontalvoo;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -12,8 +13,15 @@ public class Game extends JFrame implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int WIDTH = 800, HEIGHT = 600;
-	private static final int BUFFERS = 3;
+	private static final int BUFFERS = 3; // Numero de buffers
+	public static final int WIDTH = 800, HEIGHT = 600; // Alto y ancho
+
+	// Variables para controlar los frames por segundo
+	private double delta = 0;
+	private int averageFPS = FPS;
+	private static final int FPS = 60;
+	private static final int NS_PER_SECOND = 1_000_000_000; // Nanosegundos por segundo
+	private static final double TARGET_TIME = NS_PER_SECOND / FPS;
 
 	private Thread thread;
 	private Graphics graphics;
@@ -54,7 +62,8 @@ public class Game extends JFrame implements Runnable {
 
 		graphics = strategy.getDrawGraphics();
 
-		graphics.drawRect(0, 0, 70, 70);
+		graphics.setColor(Color.BLACK);
+		graphics.drawString(String.format("FPS: %d", averageFPS), 0, 10);
 
 		graphics.dispose();
 		strategy.show();
@@ -63,9 +72,31 @@ public class Game extends JFrame implements Runnable {
 	@Override
 	public void run() {
 
+		long now = 0;
+		long time = 0;
+		int frames = 0;
+		long lastTime = System.nanoTime();
+
 		while (running) {
-			update();
-			draw();
+
+			now = System.nanoTime();
+			time += (now - lastTime);
+			delta += (now - lastTime) / TARGET_TIME;
+			lastTime = now;
+
+			if (delta >= 1) {
+				update();
+				draw();
+				delta--;
+				frames++;
+			}
+
+			if (time >= NS_PER_SECOND) {
+				averageFPS = frames;
+				time = 0;
+				frames = 0;
+			}
+
 		}
 
 		stop();
