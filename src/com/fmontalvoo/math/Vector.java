@@ -42,6 +42,11 @@ public class Vector {
 		return (this.x * this.x) + (this.y * this.y);
 	}
 
+	/**
+	 * Calcula la magnitud del vector.
+	 * 
+	 * @return magnitud
+	 */
 	public double mag() {
 		return Math.sqrt(magSq());
 	}
@@ -80,6 +85,19 @@ public class Vector {
 
 	public double dot(Vector vector) {
 		return (this.x * vector.x) + (this.y * vector.y);
+	}
+
+	/**
+	 * Retorna un nuevo vector modificando su direccion en funcion del angulo que
+	 * recibe como parametro.
+	 * 
+	 * @param angle
+	 * @return
+	 */
+	public Vector dir(double angle) {
+		double x = Math.cos(angle) * mag();
+		double y = Math.sin(angle) * mag();
+		return new Vector(x, y);
 	}
 
 	@Override

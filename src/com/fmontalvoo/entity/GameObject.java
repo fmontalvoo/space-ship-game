@@ -26,12 +26,4 @@ public abstract class GameObject {
 		this.position = position;
 	}
 
-	public int getX() {
-		return (int) this.position.x;
-	}
-
-	public int getY() {
-		return (int) this.position.y;
-	}
-
 }
