@@ -8,13 +8,14 @@ public class KeyBoard implements KeyListener {
 	private static final int NUMBER_OF_KEYS = 256;
 	private final boolean[] keys = new boolean[NUMBER_OF_KEYS];
 
-	public static boolean up, down, left, right;
+	public static boolean up, down, left, right, fire;
 
 	public KeyBoard() {
 		up = false;
 		down = false;
 		left = false;
 		right = false;
+		fire = false;
 	}
 
 	public void update() {
@@ -22,6 +23,7 @@ public class KeyBoard implements KeyListener {
 		down = keys[KeyEvent.VK_DOWN];
 		left = keys[KeyEvent.VK_LEFT];
 		right = keys[KeyEvent.VK_RIGHT];
+		fire = keys[KeyEvent.VK_SPACE];
 	}
 
 	@Override

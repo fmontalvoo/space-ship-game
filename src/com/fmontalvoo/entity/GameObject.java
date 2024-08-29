@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import com.fmontalvoo.math.Vector;
 
 public abstract class GameObject {
+	
 	protected Vector position;
 	protected BufferedImage image;
 

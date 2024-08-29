@@ -9,30 +9,52 @@ import com.fmontalvoo.Game;
 import com.fmontalvoo.assets.Assets;
 import com.fmontalvoo.input.KeyBoard;
 import com.fmontalvoo.math.Vector;
+import com.fmontalvoo.state.GameState;
 
 public class Player extends MovingObject {
 
 	private Vector heading;
 	private Vector acceleration;
 	private boolean accelerating = false;
+	private int avg;
+
+	private final GameState state;
+	private long time, lastTime;
 
 	private final double ACCELERATION = 0.2;
 	private final double DELTA_ANGLE = 0.1;
 
-	public Player(Vector position, Vector velocity, double maxVelocity, BufferedImage image) {
+	public Player(Vector position, Vector velocity, double maxVelocity, BufferedImage image, GameState state) {
 		super(position, velocity, maxVelocity, image);
 		heading = new Vector(0, 1);
 		acceleration = new Vector();
+
+		this.state = state;
+		this.time = 0;
+		this.lastTime = System.currentTimeMillis();
+
+		// avg = (width + height) / 2
+		this.avg = (width + height) >> 1; // Calcula promedio
 	}
 
 	@Override
 	public void update() {
+
+		time += System.currentTimeMillis() - lastTime;
+		lastTime = System.currentTimeMillis();
+
 		if (KeyBoard.right) {
 			angle += DELTA_ANGLE;
 		}
 
 		if (KeyBoard.left) {
 			angle -= DELTA_ANGLE;
+		}
+
+		if (KeyBoard.fire && time > 200) {
+			state.getMovingObjects().add(0,
+					new Laser(center().add(heading.copy().mult(width)), heading.copy(), 10, angle, Assets.blueLaser));
+			time = 0;
 		}
 
 		if (KeyBoard.up) {
@@ -62,31 +84,30 @@ public class Player extends MovingObject {
 
 		Graphics2D graphics2d = (Graphics2D) graphics;
 
-		transform = AffineTransform.getTranslateInstance(getX(), getY());
-
-		int halfX = width >> 1; // width / 2
-		int halfY = height >> 1; // height / 2
-
 		if (accelerating) {
-			AffineTransform at1 = AffineTransform.getTranslateInstance(getX() + halfX + 5, getY() + halfY + 10);
-			AffineTransform at2 = AffineTransform.getTranslateInstance(getX() + 5, getY() + halfY + 10);
+			AffineTransform at1 = AffineTransform.getTranslateInstance(getX() + halfWidth + 5,
+					getY() + halfHeight + 10);
+			AffineTransform at2 = AffineTransform.getTranslateInstance(getX() + 5, getY() + halfHeight + 10);
 
 			at1.rotate(angle, -5, -10);
-			at2.rotate(angle, halfX - 5, -10);
+			at2.rotate(angle, halfWidth - 5, -10);
 
 			graphics2d.drawImage(Assets.fire, at1, null);
 			graphics2d.drawImage(Assets.fire, at2, null);
 		}
 
-		transform.rotate(angle, halfX, halfY);
-		graphics2d.drawImage(Assets.player, transform, null);
+		transform = AffineTransform.getTranslateInstance(getX(), getY());
+
+		transform.rotate(angle, halfWidth, halfHeight);
+		graphics2d.drawImage(image, transform, null);
 
 	}
 
-	public void edges() {
-		// avg = (width + height) / 2
-		int avg = (width + height) >> 1; // Calcula promedio
+	public Vector center() {
+		return position.copy().add(halfWidth, halfHeight);
+	}
 
+	public void edges() {
 		if (getX() > Game.WIDTH) {
 			setX(-avg);
 		}

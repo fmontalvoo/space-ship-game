@@ -20,9 +20,21 @@ public class Vector {
 		return this;
 	}
 
+	public Vector add(double x, double y) {
+		this.x += x;
+		this.y += y;
+		return this;
+	}
+
 	public Vector sub(Vector vector) {
 		this.x -= vector.x;
 		this.y -= vector.y;
+		return this;
+	}
+
+	public Vector sub(double x, double y) {
+		this.x -= x;
+		this.y -= y;
 		return this;
 	}
 
@@ -32,9 +44,21 @@ public class Vector {
 		return this;
 	}
 
+	public Vector mult(double x, double y) {
+		this.x *= x;
+		this.y *= y;
+		return this;
+	}
+
 	public Vector div(double scalar) {
 		this.x /= scalar;
 		this.y /= scalar;
+		return this;
+	}
+
+	public Vector div(double x, double y) {
+		this.x /= x;
+		this.y /= y;
 		return this;
 	}
 
