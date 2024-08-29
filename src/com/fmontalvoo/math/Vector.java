@@ -44,21 +44,9 @@ public class Vector {
 		return this;
 	}
 
-	public Vector mult(double x, double y) {
-		this.x *= x;
-		this.y *= y;
-		return this;
-	}
-
 	public Vector div(double scalar) {
 		this.x /= scalar;
 		this.y /= scalar;
-		return this;
-	}
-
-	public Vector div(double x, double y) {
-		this.x /= x;
-		this.y /= y;
 		return this;
 	}
 
