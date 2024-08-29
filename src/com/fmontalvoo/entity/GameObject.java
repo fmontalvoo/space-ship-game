@@ -26,4 +26,20 @@ public abstract class GameObject {
 		this.position = position;
 	}
 
+	public void setX(double x) {
+		this.position.x = x;
+	}
+
+	public double getX() {
+		return this.position.x;
+	}
+
+	public void setY(double y) {
+		this.position.y = y;
+	}
+
+	public double getY() {
+		return this.position.y;
+	}
+
 }

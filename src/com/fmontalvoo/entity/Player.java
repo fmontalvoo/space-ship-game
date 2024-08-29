@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import com.fmontalvoo.Game;
 import com.fmontalvoo.assets.Assets;
 import com.fmontalvoo.input.KeyBoard;
 import com.fmontalvoo.math.Vector;
@@ -13,6 +14,7 @@ public class Player extends MovingObject {
 
 	private Vector heading;
 	private Vector acceleration;
+	private boolean accelerating = false;
 
 	private final double ACCELERATION = 0.2;
 	private final double DELTA_ANGLE = 0.1;
@@ -34,10 +36,13 @@ public class Player extends MovingObject {
 		}
 
 		if (KeyBoard.up) {
+			accelerating = true;
 			acceleration = heading.copy().mult(ACCELERATION);
 		} else if (KeyBoard.down) {
+			accelerating = true;
 			acceleration = heading.copy().mult(-ACCELERATION);
 		} else if (velocity.mag() != 0) {
+			accelerating = false;
 			acceleration = velocity.copy().normalize().mult(-ACCELERATION / 2);
 		}
 
@@ -49,6 +54,7 @@ public class Player extends MovingObject {
 
 		position.add(velocity);
 
+		edges();
 	}
 
 	@Override
@@ -56,12 +62,44 @@ public class Player extends MovingObject {
 
 		Graphics2D graphics2d = (Graphics2D) graphics;
 
-		transform = AffineTransform.getTranslateInstance(position.x, position.y);
+		transform = AffineTransform.getTranslateInstance(getX(), getY());
 
-		transform.rotate(angle, Assets.player.getWidth() / 2, Assets.player.getHeight() / 2);
+		int halfX = width >> 1; // width / 2
+		int halfY = height >> 1; // height / 2
 
+		if (accelerating) {
+			AffineTransform at1 = AffineTransform.getTranslateInstance(getX() + halfX + 5, getY() + halfY + 10);
+			AffineTransform at2 = AffineTransform.getTranslateInstance(getX() + 5, getY() + halfY + 10);
+
+			at1.rotate(angle, -5, -10);
+			at2.rotate(angle, halfX - 5, -10);
+
+			graphics2d.drawImage(Assets.fire, at1, null);
+			graphics2d.drawImage(Assets.fire, at2, null);
+		}
+
+		transform.rotate(angle, halfX, halfY);
 		graphics2d.drawImage(Assets.player, transform, null);
 
+	}
+
+	public void edges() {
+		// avg = (width + height) / 2
+		int avg = (width + height) >> 1; // Calcula promedio
+
+		if (getX() > Game.WIDTH) {
+			setX(-avg);
+		}
+		if (getY() > Game.HEIGHT) {
+			setY(-avg);
+		}
+
+		if (getX() < -avg) {
+			setX(Game.WIDTH);
+		}
+		if (getY() < -avg) {
+			setY(Game.HEIGHT);
+		}
 	}
 
 }

@@ -58,9 +58,7 @@ public class Vector {
 	}
 
 	public Vector limit(double max) {
-		double mSq = magSq();
-
-		if (mSq > (max * max)) {
+		if (magSq() > (max * max)) {
 			setMag(max);
 		}
 

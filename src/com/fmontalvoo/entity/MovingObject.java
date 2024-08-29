@@ -7,6 +7,8 @@ import com.fmontalvoo.math.Vector;
 
 public abstract class MovingObject extends GameObject {
 
+	protected int width;
+	protected int height;
 	protected double angle;
 	protected Vector velocity;
 	protected double maxVelocity;
@@ -18,6 +20,8 @@ public abstract class MovingObject extends GameObject {
 		this.angle = 0;
 		this.velocity = velocity;
 		this.maxVelocity = maxVelocity;
+		this.width = image.getWidth();
+		this.height = image.getHeight();
 	}
 
 }
