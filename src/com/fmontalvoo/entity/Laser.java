@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import com.fmontalvoo.Game;
 import com.fmontalvoo.math.Vector;
 
 public class Laser extends MovingObject {
@@ -30,6 +31,10 @@ public class Laser extends MovingObject {
 		transform.rotate(angle, halfWidth, 0);
 
 		graphics2d.drawImage(image, transform, null);
+	}
+
+	public boolean edges() {
+		return ((getX() > Game.WIDTH) || (getY() > Game.HEIGHT) || (getX() < -width) || (getY() < -height));
 	}
 
 }

@@ -77,6 +77,8 @@ public class Player extends MovingObject {
 		position.add(velocity);
 
 		edges();
+
+		state.getMovingObjects().removeIf((item) -> (item instanceof Laser && ((Laser) item).edges()));
 	}
 
 	@Override
