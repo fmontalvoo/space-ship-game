@@ -88,16 +88,20 @@ public class Vector {
 	}
 
 	/**
-	 * Retorna un nuevo vector modificando su direccion en funcion del angulo que
-	 * recibe como parametro.
+	 * Retorna el vector modificando su direccion en funcion del angulo que recibe
+	 * como parametro.
 	 * 
 	 * @param angle
 	 * @return
 	 */
 	public Vector dir(double angle) {
-		double x = Math.cos(angle) * mag();
-		double y = Math.sin(angle) * mag();
-		return new Vector(x, y);
+		this.x = Math.cos(angle) * mag();
+		this.y = Math.sin(angle) * mag();
+		return this;
+	}
+
+	public Vector copy() {
+		return new Vector(this.x, this.y);
 	}
 
 	@Override

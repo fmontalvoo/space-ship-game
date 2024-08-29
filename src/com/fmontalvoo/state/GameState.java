@@ -11,7 +11,7 @@ public class GameState {
 	private final Player player;
 
 	public GameState() {
-		this.player = new Player(new Vector(100, 250), new Vector(0, 0), Assets.player);
+		this.player = new Player(new Vector(100, 250), new Vector(0, 0), 5, Assets.player);
 	}
 
 	public void update() {

@@ -12,23 +12,43 @@ import com.fmontalvoo.math.Vector;
 public class Player extends MovingObject {
 
 	private Vector heading;
+	private Vector acceleration;
 
-	public Player(Vector position, Vector velocity, BufferedImage image) {
-		super(position, velocity, image);
+	private final double ACCELERATION = 0.2;
+	private final double DELTA_ANGLE = 0.1;
+
+	public Player(Vector position, Vector velocity, double maxVelocity, BufferedImage image) {
+		super(position, velocity, maxVelocity, image);
 		heading = new Vector(0, 1);
+		acceleration = new Vector();
 	}
 
 	@Override
 	public void update() {
 		if (KeyBoard.right) {
-			angle += Math.PI / 20;
+			angle += DELTA_ANGLE;
 		}
 
 		if (KeyBoard.left) {
-			angle -= Math.PI / 20;
+			angle -= DELTA_ANGLE;
 		}
 
-		heading = heading.dir(angle - Math.PI / 2);
+		if (KeyBoard.up) {
+			acceleration = heading.copy().mult(ACCELERATION);
+		} else if (KeyBoard.down) {
+			acceleration = heading.copy().mult(-ACCELERATION);
+		} else if (velocity.mag() != 0) {
+			acceleration = velocity.copy().normalize().mult(-ACCELERATION / 2);
+		}
+
+		velocity.add(acceleration);
+
+		velocity.limit(maxVelocity);
+
+		heading.dir(angle - Math.PI / 2);
+
+		position.add(velocity);
+
 	}
 
 	@Override
