@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.state.GameState;
 
 public class Game extends JFrame implements Runnable {
 
@@ -29,6 +30,8 @@ public class Game extends JFrame implements Runnable {
 	private Graphics graphics;
 	private BufferStrategy strategy;
 	private static volatile boolean running = false;
+
+	private GameState gameState;
 
 	private final Canvas canvas;
 	private final Logger log = Logger.getLogger(this.getClass().getName());
@@ -53,9 +56,11 @@ public class Game extends JFrame implements Runnable {
 
 	private void init() {
 		Assets.init();
+		gameState = new GameState();
 	}
 
 	private void update() {
+		gameState.update();
 	}
 
 	private void draw() {
@@ -72,7 +77,7 @@ public class Game extends JFrame implements Runnable {
 		graphics.setColor(Color.BLACK);
 		graphics.fillRect(0, 0, WIDTH, HEIGHT);
 
-		graphics.drawImage(Assets.player, 100, 100, null);
+		gameState.draw(graphics);
 
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(String.format("FPS: %d", averageFPS), 0, 10);

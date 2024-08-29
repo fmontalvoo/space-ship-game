@@ -1,0 +1,108 @@
+package com.fmontalvoo.math;
+
+import java.util.Objects;
+
+public class Vector {
+	public double x;
+	public double y;
+
+	public Vector() {
+	}
+
+	public Vector(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public Vector add(Vector vector) {
+		this.x += vector.x;
+		this.y += vector.y;
+		return this;
+	}
+
+	public Vector sub(Vector vector) {
+		this.x -= vector.x;
+		this.y -= vector.y;
+		return this;
+	}
+
+	public Vector mult(double scalar) {
+		this.x *= scalar;
+		this.y *= scalar;
+		return this;
+	}
+
+	public Vector div(double scalar) {
+		this.x /= scalar;
+		this.y /= scalar;
+		return this;
+	}
+
+	public double magSq() {
+		return (this.x * this.x) + (this.y * this.y);
+	}
+
+	public double mag() {
+		return Math.sqrt(magSq());
+	}
+
+	public Vector setMag(double len) {
+		normalize();
+		mult(len);
+		return this;
+	}
+
+	public Vector limit(double max) {
+		double mSq = magSq();
+
+		if (mSq > (max * max)) {
+			setMag(max);
+		}
+
+		return this;
+	}
+
+	public Vector normalize() {
+		double magnitude = mag();
+
+		if (magnitude != 0 && magnitude != 1) {
+			div(magnitude);
+		}
+
+		return this;
+	}
+
+	public double dist(Vector vector) {
+		double dx = this.x - vector.x;
+		double dy = this.y - vector.y;
+		return Math.sqrt((dx * dx) + (dy * dy));
+	}
+
+	public double dot(Vector vector) {
+		return (this.x * vector.x) + (this.y * vector.y);
+	}
+
+	@Override
+	public String toString() {
+		return "[ " + this.x + ", " + this.y + " ]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x, y);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Vector other = (Vector) obj;
+		return Double.doubleToLongBits(x) == Double.doubleToLongBits(other.x)
+				&& Double.doubleToLongBits(y) == Double.doubleToLongBits(other.y);
+	}
+
+}
