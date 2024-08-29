@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.input.KeyBoard;
 import com.fmontalvoo.state.GameState;
 
 public class Game extends JFrame implements Runnable {
@@ -32,6 +33,7 @@ public class Game extends JFrame implements Runnable {
 	private static volatile boolean running = false;
 
 	private GameState gameState;
+	private KeyBoard keyBoard;
 
 	private final Canvas canvas;
 	private final Logger log = Logger.getLogger(this.getClass().getName());
@@ -46,12 +48,15 @@ public class Game extends JFrame implements Runnable {
 		setVisible(true);
 
 		canvas = new Canvas();
+		keyBoard = new KeyBoard();
+
 		canvas.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		canvas.setMaximumSize(new Dimension(WIDTH, HEIGHT));
 		canvas.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		canvas.setFocusable(true);
 
 		add(canvas);
+		canvas.addKeyListener(keyBoard);
 	}
 
 	private void init() {
@@ -60,6 +65,7 @@ public class Game extends JFrame implements Runnable {
 	}
 
 	private void update() {
+		keyBoard.update();
 		gameState.update();
 	}
 

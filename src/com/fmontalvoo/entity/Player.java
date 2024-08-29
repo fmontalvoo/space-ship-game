@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.input.KeyBoard;
 import com.fmontalvoo.math.Vector;
 
 public class Player extends GameObject {
@@ -14,7 +15,9 @@ public class Player extends GameObject {
 
 	@Override
 	public void update() {
-
+		if(KeyBoard.right) {
+			position.x += 1;
+		}
 	}
 
 	@Override
