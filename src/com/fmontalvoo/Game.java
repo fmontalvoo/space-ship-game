@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
+import com.fmontalvoo.assets.Assets;
+
 public class Game extends JFrame implements Runnable {
 
 	private static final long serialVersionUID = 1L;
@@ -49,6 +51,10 @@ public class Game extends JFrame implements Runnable {
 		add(canvas);
 	}
 
+	private void init() {
+		Assets.init();
+	}
+
 	private void update() {
 	}
 
@@ -61,10 +67,17 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		graphics = strategy.getDrawGraphics();
+//		---------------------------------------------------------------------
 
 		graphics.setColor(Color.BLACK);
+		graphics.fillRect(0, 0, WIDTH, HEIGHT);
+
+		graphics.drawImage(Assets.player, 100, 100, null);
+
+		graphics.setColor(Color.WHITE);
 		graphics.drawString(String.format("FPS: %d", averageFPS), 0, 10);
 
+//		---------------------------------------------------------------------
 		graphics.dispose();
 		strategy.show();
 	}
@@ -76,6 +89,8 @@ public class Game extends JFrame implements Runnable {
 		long time = 0;
 		int frames = 0;
 		long lastTime = System.nanoTime();
+
+		init();
 
 		while (running) {
 
