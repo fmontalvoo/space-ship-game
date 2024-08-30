@@ -18,7 +18,7 @@ public class Game extends JFrame implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	private static final int BUFFERS = 3; // Numero de buffers
-	public static final int WIDTH = 800, HEIGHT = 600; // Alto y ancho
+	public static final int WIDTH = 1000, HEIGHT = 600; // Alto y ancho
 
 	// Variables para controlar los frames por segundo
 	private double delta = 0;
@@ -45,8 +45,6 @@ public class Game extends JFrame implements Runnable {
 		setTitle("Space Ship Game");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setVisible(true);
-
 		canvas = new Canvas();
 		keyBoard = new KeyBoard();
 
@@ -57,6 +55,8 @@ public class Game extends JFrame implements Runnable {
 
 		add(canvas);
 		canvas.addKeyListener(keyBoard);
+
+		setVisible(true);
 	}
 
 	private void init() {
@@ -122,7 +122,6 @@ public class Game extends JFrame implements Runnable {
 				time = 0;
 				frames = 0;
 			}
-
 		}
 
 		stop();

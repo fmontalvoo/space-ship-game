@@ -10,28 +10,28 @@ import com.fmontalvoo.assets.Assets;
 import com.fmontalvoo.input.KeyBoard;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.state.GameState;
+import com.fmontalvoo.util.Chronometer;
 
 public class Player extends MovingObject {
 
-	private Vector heading;
 	private Vector acceleration;
 	private boolean accelerating = false;
-	private int avg;
 
-	private final GameState state;
-	private long time, lastTime;
+	private final int avg;
+	private final Vector heading;
+	private final Chronometer fireRate;
 
-	private final double ACCELERATION = 0.2;
-	private final double DELTA_ANGLE = 0.1;
+	private final static int FIRE_RATE = 200;
+	private final static double DELTA_ANGLE = 0.1;
+	private final static double ACCELERATION = 0.2;
 
 	public Player(Vector position, Vector velocity, double maxVelocity, BufferedImage image, GameState state) {
-		super(position, velocity, maxVelocity, image);
-		heading = new Vector(0, 1);
-		acceleration = new Vector();
+		super(position, velocity, maxVelocity, image, state);
 
-		this.state = state;
-		this.time = 0;
-		this.lastTime = System.currentTimeMillis();
+		this.heading = new Vector(0, 1);
+		this.acceleration = new Vector();
+
+		this.fireRate = new Chronometer();
 
 		// avg = (width + height) / 2
 		this.avg = (width + height) >> 1; // Calcula promedio
@@ -39,9 +39,6 @@ public class Player extends MovingObject {
 
 	@Override
 	public void update() {
-
-		time += System.currentTimeMillis() - lastTime;
-		lastTime = System.currentTimeMillis();
 
 		if (KeyBoard.right) {
 			angle += DELTA_ANGLE;
@@ -51,10 +48,10 @@ public class Player extends MovingObject {
 			angle -= DELTA_ANGLE;
 		}
 
-		if (KeyBoard.fire && time > 200) {
-			state.getMovingObjects().add(0,
-					new Laser(center().add(heading.copy().mult(width)), heading.copy(), 10, angle, Assets.blueLaser));
-			time = 0;
+		if (KeyBoard.fire && !fireRate.isRunning()) {
+			state.getMovingObjects().add(0, new Laser(center().add(heading.copy().mult(width)), heading.copy(), 10,
+					angle, Assets.blueLaser, state));
+			fireRate.run(FIRE_RATE);
 		}
 
 		if (KeyBoard.up) {
@@ -78,7 +75,7 @@ public class Player extends MovingObject {
 
 		edges();
 
-		state.getMovingObjects().removeIf((item) -> (item instanceof Laser && ((Laser) item).edges()));
+		fireRate.update();
 	}
 
 	@Override
@@ -109,7 +106,7 @@ public class Player extends MovingObject {
 		return position.copy().add(halfWidth, halfHeight);
 	}
 
-	public void edges() {
+	private void edges() {
 		if (getX() > Game.WIDTH) {
 			setX(-avg);
 		}

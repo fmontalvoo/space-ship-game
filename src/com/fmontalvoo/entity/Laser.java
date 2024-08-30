@@ -7,11 +7,13 @@ import java.awt.image.BufferedImage;
 
 import com.fmontalvoo.Game;
 import com.fmontalvoo.math.Vector;
+import com.fmontalvoo.state.GameState;
 
 public class Laser extends MovingObject {
 
-	public Laser(Vector position, Vector velocity, double maxVelocity, double angle, BufferedImage image) {
-		super(position, velocity, maxVelocity, image);
+	public Laser(Vector position, Vector velocity, double maxVelocity, double angle, BufferedImage image,
+			GameState state) {
+		super(position, velocity, maxVelocity, image, state);
 
 		this.angle = angle;
 		this.velocity = velocity.mult(maxVelocity);
@@ -20,6 +22,9 @@ public class Laser extends MovingObject {
 	@Override
 	public void update() {
 		position.add(velocity);
+		if (edges()) {
+			state.getMovingObjects().remove(this);
+		}
 	}
 
 	@Override
@@ -33,8 +38,9 @@ public class Laser extends MovingObject {
 		graphics2d.drawImage(image, transform, null);
 	}
 
-	public boolean edges() {
-		return ((getX() > Game.WIDTH) || (getY() > Game.HEIGHT) || (getX() < -width) || (getY() < -height));
+	private boolean edges() {
+		return ((getX() > Game.WIDTH + height) || (getY() > Game.HEIGHT + height) || (getX() < -height)
+				|| (getY() < -height));
 	}
 
 }

@@ -105,8 +105,10 @@ public class Vector {
 	 * @return
 	 */
 	public Vector dir(double angle) {
-		this.x = Math.cos(angle) * mag();
-		this.y = Math.sin(angle) * mag();
+		double magnitude = mag();
+
+		this.x = Math.cos(angle) * magnitude;
+		this.y = Math.sin(angle) * magnitude;
 		return this;
 	}
 

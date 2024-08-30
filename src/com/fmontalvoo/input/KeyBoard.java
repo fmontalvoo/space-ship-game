@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyBoard implements KeyListener {
 
-	private static final int NUMBER_OF_KEYS = 256;
+	private static final int NUMBER_OF_KEYS = 50;
 	private final boolean[] keys = new boolean[NUMBER_OF_KEYS];
 
 	public static boolean up, down, left, right, fire;

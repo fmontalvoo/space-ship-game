@@ -4,14 +4,17 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.fmontalvoo.math.Vector;
+import com.fmontalvoo.state.GameState;
 
 public abstract class GameObject {
-	
-	protected Vector position;
-	protected BufferedImage image;
 
-	public GameObject(Vector position, BufferedImage image) {
+	protected Vector position;
+	protected final BufferedImage image;
+	protected final GameState state;
+
+	public GameObject(Vector position, BufferedImage image, GameState state) {
 		this.image = image;
+		this.state = state;
 		this.position = position;
 	}
 
