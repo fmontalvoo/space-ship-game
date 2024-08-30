@@ -59,7 +59,6 @@ public class GameState {
 			movingObjects.add(new Meteor(new Vector(x, y), new Vector(0, 1).dir(Math.random() * (2 * Math.PI)),
 					Meteor.MAX_VELOCITY * Math.random() + 1, image, this, Size.BIG));
 		}
-		meteors++;
 	}
 
 	public List<MovingObject> getMovingObjects() {

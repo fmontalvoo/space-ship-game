@@ -10,10 +10,6 @@ public abstract class MovingObject extends GameObject {
 
 	protected double angle;
 	protected Vector velocity;
-	protected final int width;
-	protected final int height;
-	protected final int halfWidth;
-	protected final int halfHeight;
 	protected final double maxVelocity;
 	protected AffineTransform transform;
 
@@ -23,10 +19,6 @@ public abstract class MovingObject extends GameObject {
 		this.angle = 0;
 		this.velocity = velocity;
 		this.maxVelocity = maxVelocity;
-		this.width = image.getWidth();
-		this.height = image.getHeight();
-		this.halfWidth = this.width >> 1; // width / 2
-		this.halfHeight = this.height >> 1; // height / 2
 	}
 
 }

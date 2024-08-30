@@ -9,13 +9,23 @@ import com.fmontalvoo.state.GameState;
 public abstract class GameObject {
 
 	protected Vector position;
-	protected final BufferedImage image;
 	protected final GameState state;
+	protected final BufferedImage image;
+
+	protected final int width;
+	protected final int height;
+	protected final int halfWidth;
+	protected final int halfHeight;
 
 	public GameObject(Vector position, BufferedImage image, GameState state) {
 		this.image = image;
 		this.state = state;
 		this.position = position;
+
+		this.width = image.getWidth();
+		this.height = image.getHeight();
+		this.halfWidth = this.width >> 1; // width / 2
+		this.halfHeight = this.height >> 1; // height / 2
 	}
 
 	public abstract void update();
