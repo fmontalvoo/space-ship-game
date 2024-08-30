@@ -25,7 +25,7 @@ public class Player extends MovingObject {
 	private final static double DELTA_ANGLE = 0.1;
 	private final static double ACCELERATION = 0.2;
 
-	public final static double PLAYER_MAX_VELOCITY = 7;
+	public final static double MAX_VELOCITY = 7;
 
 	public Player(Vector position, Vector velocity, double maxVelocity, BufferedImage image, GameState state) {
 		super(position, velocity, maxVelocity, image, state);
@@ -52,7 +52,7 @@ public class Player extends MovingObject {
 
 		if (KeyBoard.fire && !fireRate.isRunning()) {
 			state.getMovingObjects().add(0, new Laser(center().add(heading.copy().mult(width)), heading.copy(),
-					Laser.LASER_MAX_VELOCITY, angle, Assets.blueLaser, state));
+					Laser.MAX_VELOCITY, angle, Assets.blueLaser, state));
 			fireRate.run(FIRE_RATE);
 		}
 
