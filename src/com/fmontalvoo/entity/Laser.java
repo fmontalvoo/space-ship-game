@@ -11,6 +11,8 @@ import com.fmontalvoo.state.GameState;
 
 public class Laser extends MovingObject {
 
+	public final static double LASER_MAX_VELOCITY = 14;
+
 	public Laser(Vector position, Vector velocity, double maxVelocity, double angle, BufferedImage image,
 			GameState state) {
 		super(position, velocity, maxVelocity, image, state);

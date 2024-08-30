@@ -16,7 +16,8 @@ public class GameState {
 	private final List<MovingObject> movingObjects = new ArrayList<>();
 
 	public GameState() {
-		this.movingObjects.add(new Player(new Vector(375, 281), new Vector(0, 0), 5, Assets.player, this));
+		this.movingObjects.add(
+				new Player(new Vector(375, 281), new Vector(0, 0), Player.PLAYER_MAX_VELOCITY, Assets.player, this));
 	}
 
 	public void update() {
