@@ -26,6 +26,10 @@ public class Vector {
 		return this;
 	}
 
+	public static Vector add(Vector v1, Vector v2) {
+		return new Vector(v1.x + v2.x, v1.y + v2.y);
+	}
+
 	public Vector sub(Vector vector) {
 		this.x -= vector.x;
 		this.y -= vector.y;
@@ -38,16 +42,28 @@ public class Vector {
 		return this;
 	}
 
+	public static Vector sub(Vector v1, Vector v2) {
+		return new Vector(v1.x - v2.x, v1.y - v2.y);
+	}
+
 	public Vector mult(double scalar) {
 		this.x *= scalar;
 		this.y *= scalar;
 		return this;
 	}
 
+	public static Vector mult(Vector v, double scalar) {
+		return new Vector(v.x * scalar, v.y * scalar);
+	}
+
 	public Vector div(double scalar) {
 		this.x /= scalar;
 		this.y /= scalar;
 		return this;
+	}
+
+	public static Vector div(Vector v, double scalar) {
+		return new Vector(v.x / scalar, v.y / scalar);
 	}
 
 	public double magSq() {

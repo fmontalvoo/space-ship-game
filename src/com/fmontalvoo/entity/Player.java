@@ -58,13 +58,13 @@ public class Player extends MovingObject {
 
 		if (KeyBoard.up) {
 			accelerating = true;
-			acceleration = heading.copy().mult(ACCELERATION);
+			acceleration = Vector.mult(heading, ACCELERATION);
 		} else if (KeyBoard.down) {
 			accelerating = true;
-			acceleration = heading.copy().mult(-ACCELERATION);
+			acceleration = Vector.mult(heading, -ACCELERATION);
 		} else if (velocity.mag() != 0) {
 			accelerating = false;
-			acceleration = velocity.copy().normalize().mult(-ACCELERATION / 2);
+			acceleration = Vector.mult(velocity.copy().normalize(), -ACCELERATION / 2);
 		}
 
 		velocity.add(acceleration).limit(maxVelocity);

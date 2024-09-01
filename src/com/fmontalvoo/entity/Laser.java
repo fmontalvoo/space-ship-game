@@ -18,7 +18,7 @@ public class Laser extends MovingObject {
 		super(position, velocity, maxVelocity, image, state);
 
 		this.angle = angle;
-		this.velocity = velocity.mult(maxVelocity);
+		this.velocity.mult(maxVelocity);
 	}
 
 	@Override
