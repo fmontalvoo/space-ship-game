@@ -67,9 +67,7 @@ public class Player extends MovingObject {
 			acceleration = velocity.copy().normalize().mult(-ACCELERATION / 2);
 		}
 
-		velocity.add(acceleration);
-
-		velocity.limit(maxVelocity);
+		velocity.add(acceleration).limit(maxVelocity);
 
 		heading.dir(angle - Math.PI / 2);
 
