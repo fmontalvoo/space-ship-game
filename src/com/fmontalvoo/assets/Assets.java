@@ -18,6 +18,9 @@ public class Assets {
 	public static BufferedImage[] smalls = new BufferedImage[2];
 	public static BufferedImage[] tinies = new BufferedImage[2];
 
+	// Explosion
+	public static BufferedImage[] explosion = new BufferedImage[9];
+
 	public static void init() {
 		player = Loader.imageLoader("/ships/player.png");
 
@@ -41,6 +44,10 @@ public class Assets {
 
 		for (int i = 0; i < tinies.length; i++) {
 			tinies[i] = Loader.imageLoader(String.format("/meteors/tiny%d.png", (i + 1)));
+		}
+
+		for (int i = 0; i < explosion.length; i++) {
+			explosion[i] = Loader.imageLoader(String.format("/explosion/%d.png", i));
 		}
 	}
 
