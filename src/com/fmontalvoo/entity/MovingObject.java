@@ -3,6 +3,7 @@ package com.fmontalvoo.entity;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Objects;
 
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.state.GameState;
@@ -54,6 +55,25 @@ public abstract class MovingObject extends GameObject {
 
 	protected Vector center() {
 		return position.copy().add(halfWidth, halfHeight);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(angle, maxVelocity, transform, velocity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MovingObject other = (MovingObject) obj;
+		return Double.doubleToLongBits(angle) == Double.doubleToLongBits(other.angle)
+				&& Double.doubleToLongBits(maxVelocity) == Double.doubleToLongBits(other.maxVelocity)
+				&& Objects.equals(transform, other.transform) && Objects.equals(velocity, other.velocity);
 	}
 
 }
