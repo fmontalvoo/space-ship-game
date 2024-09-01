@@ -29,14 +29,17 @@ public class GameState {
 	}
 
 	public void update() {
+		boolean hasMeteor = false;
+
 		for (int i = 0; i < movingObjects.size(); i++) {
 			movingObjects.get(i).update();
 
-			if (movingObjects.get(i) instanceof Meteor) {
-				return;
-			}
+			hasMeteor = (movingObjects.get(i) instanceof Meteor);
 		}
-		startWave();
+
+		if (!hasMeteor) {
+			startWave();
+		}
 	}
 
 	public void draw(Graphics graphics) {
@@ -54,11 +57,12 @@ public class GameState {
 			x = (i % 2 == 0) ? Math.random() * Game.WIDTH : 0;
 			y = (i % 2 == 0) ? 0 : Math.random() * Game.HEIGHT;
 
-			BufferedImage image = Assets.bigs[(int) Math.random() * Assets.bigs.length];
+			BufferedImage image = Assets.bigs[(int) (Math.random() * Assets.bigs.length)];
 
 			movingObjects.add(new Meteor(new Vector(x, y), new Vector(0, 1).dir(Math.random() * (2 * Math.PI)),
 					Meteor.MAX_VELOCITY * Math.random() + 1, image, this, Size.BIG));
 		}
+		meteors++;
 	}
 
 	public List<MovingObject> getMovingObjects() {

@@ -24,9 +24,12 @@ public class Laser extends MovingObject {
 	@Override
 	public void update() {
 		position.add(velocity);
+
 		if (edges()) {
-			state.getMovingObjects().remove(this);
+			destroy();
 		}
+
+		checkCollision();
 	}
 
 	@Override
@@ -43,6 +46,11 @@ public class Laser extends MovingObject {
 	private boolean edges() {
 		return ((getX() > Game.WIDTH + height) || (getY() > Game.HEIGHT + height) || (getX() < -height)
 				|| (getY() < -height));
+	}
+
+	@Override
+	protected Vector center() {
+		return position.copy().add(halfWidth, halfWidth);
 	}
 
 }

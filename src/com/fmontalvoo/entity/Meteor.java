@@ -24,6 +24,7 @@ public class Meteor extends MovingObject {
 		super(position, velocity, maxVelocity, image, state);
 
 		this.size = size;
+		this.velocity.mult(maxVelocity);
 
 		this.avg = (width + height) >> 1; // Calcula promedio
 	}
@@ -45,6 +46,39 @@ public class Meteor extends MovingObject {
 
 		transform.rotate(angle, halfWidth, halfHeight);
 		graphics2d.drawImage(image, transform, null);
+	}
+
+	public void divideMeteor(Meteor meteor) {
+		Size newSize = null;
+		Size size = meteor.getSize();
+		BufferedImage[] images = size.images;
+
+		switch (size) {
+		case BIG:
+			newSize = Size.MED;
+			break;
+		case MED:
+			newSize = Size.SMALL;
+			break;
+		case SMALL:
+			newSize = Size.TINY;
+			break;
+		default:
+			return;
+		}
+		for (int i = 0; i < size.quantity; i++) {
+			state.getMovingObjects()
+					.add(new Meteor(meteor.getPosition().copy(), new Vector(0, 1).dir(Math.random() * (2 * Math.PI)),
+							Meteor.MAX_VELOCITY * Math.random() + 1, images[(int) (Math.random() * images.length)],
+							state, newSize));
+		}
+
+	}
+
+	@Override
+	protected void destroy() {
+		divideMeteor(this);
+		super.destroy();
 	}
 
 	public Size getSize() {

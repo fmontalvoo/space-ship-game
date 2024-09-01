@@ -78,6 +78,8 @@ public class Player extends MovingObject {
 		edges();
 
 		fireRate.update();
+
+		checkCollision();
 	}
 
 	@Override
@@ -102,10 +104,6 @@ public class Player extends MovingObject {
 		transform.rotate(angle, halfWidth, halfHeight);
 		graphics2d.drawImage(image, transform, null);
 
-	}
-
-	public Vector center() {
-		return position.copy().add(halfWidth, halfHeight);
 	}
 
 	private void edges() {
