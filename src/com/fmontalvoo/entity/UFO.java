@@ -29,6 +29,7 @@ public class UFO extends MovingObject {
 	public static final double MASS = 60;
 	public static final int NODE_RADIUS = 160;
 	public final static double MAX_VELOCITY = 5;
+	public static final double ANGLE_RANGE = Math.PI / 2;
 
 	public UFO(Vector position, Vector velocity, double maxVelocity, BufferedImage image, List<Vector> path,
 			GameState state) {
@@ -64,9 +65,13 @@ public class UFO extends MovingObject {
 			Vector toPlayer = state.getPlayer().center().sub(center());
 			toPlayer.normalize();
 
-			double currentAngle = toPlayer.angle();
+			double newAngle = toPlayer.angle();
 
-			double newAngle = Math.random() * Math.PI - (Math.PI / 2) + currentAngle;
+			newAngle += Math.random() * ANGLE_RANGE - (ANGLE_RANGE / 2);
+
+			if (toPlayer.x < 0) {
+				newAngle = -newAngle + Math.PI;
+			}
 
 			toPlayer.dir(newAngle);
 
@@ -74,7 +79,7 @@ public class UFO extends MovingObject {
 					newAngle + (Math.PI / 2), Assets.redLaser, state);
 
 			state.getMovingObjects().add(0, laser);
-			
+
 			fireRate.run(FIRE_RATE);
 		}
 
