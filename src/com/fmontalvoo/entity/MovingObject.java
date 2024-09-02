@@ -43,6 +43,13 @@ public abstract class MovingObject extends GameObject {
 	}
 
 	protected void objectCollision(MovingObject a, MovingObject b) {
+		if (a instanceof Player && ((Player) a).isSpawning()) {
+			return;
+		}
+		if (b instanceof Player && ((Player) b).isSpawning()) {
+			return;
+		}
+
 		if (!(a instanceof Meteor && b instanceof Meteor)) {
 			state.playExplosion(center());
 			a.destroy();

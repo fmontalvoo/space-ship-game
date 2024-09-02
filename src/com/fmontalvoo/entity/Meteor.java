@@ -78,7 +78,7 @@ public class Meteor extends MovingObject {
 
 	@Override
 	protected void destroy() {
-		state.addScore(SCORE);
+		state.getHUD().addScore(SCORE);
 		divideMeteor(this);
 		super.destroy();
 	}

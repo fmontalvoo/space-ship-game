@@ -15,16 +15,21 @@ import com.fmontalvoo.util.Chronometer;
 public class Player extends MovingObject {
 
 	private Vector acceleration;
+	private boolean spawning, visible;
 	private boolean accelerating = false;
 
 	private int lifes;
 	private final int avg;
 	private final Vector heading;
 	private final Chronometer fireRate;
+	private final Chronometer spawnTime;
+	private final Chronometer flickerTime;
 
 	private final static int FIRE_RATE = 200;
 	private final static double DELTA_ANGLE = 0.1;
 	private final static double ACCELERATION = 0.2;
+	private static final long FLICKER_TIME = 200;
+	private static final long SPAWNING_TIME = 3000;
 
 	public final static double MAX_VELOCITY = 7;
 
@@ -35,6 +40,8 @@ public class Player extends MovingObject {
 		this.acceleration = new Vector();
 
 		this.fireRate = new Chronometer();
+		this.spawnTime = new Chronometer();
+		this.flickerTime = new Chronometer();
 
 		this.lifes = 3;
 		// avg = (width + height) / 2
@@ -44,6 +51,18 @@ public class Player extends MovingObject {
 	@Override
 	public void update() {
 
+		if (!spawnTime.isRunning()) {
+			spawning = false;
+			visible = true;
+		}
+
+		if (spawning) {
+			if (!flickerTime.isRunning()) {
+				flickerTime.run(FLICKER_TIME);
+				visible = !visible;
+			}
+		}
+
 		if (KeyBoard.right) {
 			angle += DELTA_ANGLE;
 		}
@@ -52,7 +71,7 @@ public class Player extends MovingObject {
 			angle -= DELTA_ANGLE;
 		}
 
-		if (KeyBoard.fire && !fireRate.isRunning()) {
+		if (KeyBoard.fire && !fireRate.isRunning() && !spawning) {
 			state.getMovingObjects().add(0, new Laser(center().add(heading.copy().mult(width)), heading.copy(),
 					Laser.MAX_VELOCITY, angle, Assets.blueLaser, state));
 			fireRate.run(FIRE_RATE);
@@ -78,12 +97,17 @@ public class Player extends MovingObject {
 		edges();
 
 		fireRate.update();
+		spawnTime.update();
+		flickerTime.update();
 
 		checkCollision();
 	}
 
 	@Override
 	public void draw(Graphics graphics) {
+		if (!visible) {
+			return;
+		}
 
 		Graphics2D graphics2d = (Graphics2D) graphics;
 
@@ -122,12 +146,30 @@ public class Player extends MovingObject {
 		}
 	}
 
+	@Override
+	protected void destroy() {
+		spawning = true;
+		spawnTime.run(SPAWNING_TIME);
+		lifes--;
+		resetValues();
+
+		if (lifes == 0) {
+			super.destroy();
+		}
+	}
+
+	private void resetValues() {
+		angle = 0;
+		velocity = new Vector();
+		position = new Vector((Game.WIDTH >> 1) - halfWidth, (Game.HEIGHT >> 1) - halfHeight);
+	}
+
 	public int getLifes() {
 		return lifes;
 	}
 
-	public void setLifes(int lifes) {
-		this.lifes = lifes;
+	public boolean isSpawning() {
+		return spawning;
 	}
 
 }

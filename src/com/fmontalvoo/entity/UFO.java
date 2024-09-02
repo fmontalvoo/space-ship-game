@@ -136,7 +136,7 @@ public class UFO extends MovingObject {
 
 	@Override
 	protected void destroy() {
-		state.addScore(SCORE);
+		state.getHUD().addScore(SCORE);
 		super.destroy();
 	}
 
