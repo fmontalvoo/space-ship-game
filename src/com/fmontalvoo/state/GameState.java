@@ -28,7 +28,6 @@ public class GameState {
 
 	public GameState() {
 		this.meteors = 1;
-		spawnUFO();
 
 		this.player = new Player(new Vector(475, 281), new Vector(0, 0), Player.MAX_VELOCITY, Assets.player, this);
 
@@ -36,14 +35,8 @@ public class GameState {
 	}
 
 	public void update() {
-		boolean hasMeteor = false;
-
 		for (int i = 0; i < movingObjects.size(); i++) {
-			MovingObject movingObject = movingObjects.get(i);
-
-			movingObject.update();
-
-			hasMeteor = (movingObject instanceof Meteor);
+			movingObjects.get(i).update();
 		}
 
 		for (int i = 0; i < explosions.size(); i++) {
@@ -56,9 +49,14 @@ public class GameState {
 			}
 		}
 
-		if (!hasMeteor) {
-			startWave();
+		for (int i = 0; i < movingObjects.size(); i++) {
+			if (movingObjects.get(i) instanceof Meteor) {
+				return;
+			}
 		}
+
+		startWave();
+		spawnUFO();
 	}
 
 	public void draw(Graphics graphics) {
