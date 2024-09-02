@@ -1,5 +1,6 @@
 package com.fmontalvoo.state;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -16,19 +17,23 @@ import com.fmontalvoo.entity.MovingObject;
 import com.fmontalvoo.entity.Player;
 import com.fmontalvoo.entity.UFO;
 import com.fmontalvoo.math.Vector;
+import com.fmontalvoo.util.Message;
 import com.fmontalvoo.util.Size;
 
 public class GameState {
 
+	private int waves;
 	private int meteors;
 
 	private final HUD hud;
 	private final Player player;
 
+	private final List<Message> messages = new ArrayList<>();
 	private final List<Animation> explosions = new ArrayList<>();
 	private final List<MovingObject> movingObjects = new ArrayList<>();
 
 	public GameState() {
+		this.waves = 1;
 		this.meteors = 1;
 
 		this.player = new Player(new Vector(475, 281), new Vector(0, 0), Player.MAX_VELOCITY, Assets.player, this);
@@ -76,6 +81,10 @@ public class GameState {
 			g2d.drawImage(anim.getCurrentFrame(), (int) anim.getX(), (int) anim.getY(), null);
 		}
 
+		for (int i = 0; i < messages.size(); i++) {
+			messages.get(i).draw(g2d);
+		}
+
 		hud.drawScore(graphics);
 		hud.drawLifes(graphics);
 	}
@@ -88,6 +97,10 @@ public class GameState {
 
 	private void startWave() {
 		double x, y;
+
+		messages.add(new Message(new Vector(Game.WIDTH >> 1, Game.HEIGHT >> 1), String.format("WAVE %d", waves),
+				Assets.fontBig, Color.WHITE, true, false, this));
+
 		for (int i = 0; i < meteors; i++) {
 			x = (i % 2 == 0) ? Math.random() * Game.WIDTH : 0;
 			y = (i % 2 == 0) ? 0 : Math.random() * Game.HEIGHT;
@@ -137,6 +150,12 @@ public class GameState {
 
 	}
 
+	public void addScore(int value, Vector position) {
+		hud.addScore(value);
+		messages.add(new Message(position, String.format("+%d score", value), Assets.fontMed, Color.WHITE, false, true,
+				this));
+	}
+
 	public List<MovingObject> getMovingObjects() {
 		return movingObjects;
 	}
@@ -145,8 +164,8 @@ public class GameState {
 		return player;
 	}
 
-	public HUD getHUD() {
-		return this.hud;
+	public List<Message> getMessages() {
+		return messages;
 	}
 
 }

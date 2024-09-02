@@ -14,23 +14,22 @@ import com.fmontalvoo.util.Chronometer;
 
 public class UFO extends MovingObject {
 
-	private final int avg;
-
 	private int index;
 	private boolean following;
 	private Vector currentNode;
-	private final List<Vector> path;
 
+	private final int avg;
+	private final List<Vector> path;
 	private final Chronometer fireRate;
 
-	private final static int FIRE_RATE = 1000;
-	private final static double DELTA_ANGLE = 0.05;
+	private static final int SCORE = 40;
+	private static final double MASS = 60;
+	private static final int FIRE_RATE = 1000;
+	private static final int NODE_RADIUS = 160;
+	private static final double DELTA_ANGLE = 0.05;
+	private static final double ANGLE_RANGE = Math.PI / 2;
 
-	public static final int SCORE = 40;
-	public static final double MASS = 60;
-	public static final int NODE_RADIUS = 160;
-	public final static double MAX_VELOCITY = 5;
-	public static final double ANGLE_RANGE = Math.PI / 2;
+	public static final double MAX_VELOCITY = 5;
 
 	public UFO(Vector position, Vector velocity, double maxVelocity, BufferedImage image, List<Vector> path,
 			GameState state) {
@@ -136,7 +135,7 @@ public class UFO extends MovingObject {
 
 	@Override
 	protected void destroy() {
-		state.getHUD().addScore(SCORE);
+		state.addScore(SCORE, position);
 		super.destroy();
 	}
 

@@ -18,20 +18,21 @@ public class Player extends MovingObject {
 	private boolean spawning, visible;
 	private boolean accelerating = false;
 
-	private int lifes;
 	private final int avg;
 	private final Vector heading;
 	private final Chronometer fireRate;
 	private final Chronometer spawnTime;
 	private final Chronometer flickerTime;
 
-	private final static int FIRE_RATE = 200;
-	private final static double DELTA_ANGLE = 0.1;
-	private final static double ACCELERATION = 0.2;
+	private static final int FIRE_RATE = 200;
 	private static final long FLICKER_TIME = 200;
+	private static final double DELTA_ANGLE = 0.1;
+	private static final double ACCELERATION = 0.2;
 	private static final long SPAWNING_TIME = 3000;
 
-	public final static double MAX_VELOCITY = 7;
+	public int lifes;
+
+	public static final double MAX_VELOCITY = 7;
 
 	public Player(Vector position, Vector velocity, double maxVelocity, BufferedImage image, GameState state) {
 		super(position, velocity, maxVelocity, image, state);
@@ -162,10 +163,6 @@ public class Player extends MovingObject {
 		angle = 0;
 		velocity = new Vector();
 		position = new Vector((Game.WIDTH >> 1) - halfWidth, (Game.HEIGHT >> 1) - halfHeight);
-	}
-
-	public int getLifes() {
-		return lifes;
 	}
 
 	public boolean isSpawning() {

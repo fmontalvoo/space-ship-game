@@ -38,9 +38,7 @@ public class HUD {
 
 		g.drawImage(Assets.numbers[10], (int) (lifePos.x + 40), (int) (lifePos.y + 5), null);
 
-		int lifes = this.player.getLifes();
-
-		String lifesToString = Integer.toString(lifes);
+		String lifesToString = Integer.toString(this.player.lifes);
 
 		Vector pos = new Vector(lifePos.x, lifePos.y);
 

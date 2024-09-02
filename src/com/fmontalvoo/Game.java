@@ -15,25 +15,25 @@ import com.fmontalvoo.state.GameState;
 
 public class Game extends JFrame implements Runnable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1072612083774705497L;
 
-	private static final int BUFFERS = 3; // Numero de buffers
 	public static final int WIDTH = 1000, HEIGHT = 600; // Alto y ancho
 
 	// Variables para controlar los frames por segundo
 	private double delta = 0;
-	private int averageFPS = FPS;
+
 	private static final int FPS = 60;
+	private static final int BUFFERS = 3; // Numero de buffers
 	private static final int NS_PER_SECOND = 1_000_000_000; // Nanosegundos por segundo
 	private static final double TARGET_TIME = NS_PER_SECOND / FPS;
 
 	private Thread thread;
 	private Graphics graphics;
-	private BufferStrategy strategy;
-	private static volatile boolean running = false;
-
-	private GameState gameState;
 	private KeyBoard keyBoard;
+	private GameState gameState;
+	private int averageFPS = FPS;
+	private BufferStrategy strategy;
+	private volatile boolean running = false;
 
 	private final Canvas canvas;
 	private final Logger log = Logger.getLogger(this.getClass().getName());

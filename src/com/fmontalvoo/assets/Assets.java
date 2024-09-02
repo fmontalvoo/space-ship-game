@@ -1,5 +1,6 @@
 package com.fmontalvoo.assets;
 
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 public class Assets {
@@ -15,19 +16,23 @@ public class Assets {
 	public static BufferedImage blueLaser, greenLaser, redLaser;
 
 	// Meteors
-	public static BufferedImage[] bigs = new BufferedImage[4];
-	public static BufferedImage[] meds = new BufferedImage[2];
-	public static BufferedImage[] smalls = new BufferedImage[2];
-	public static BufferedImage[] tinies = new BufferedImage[2];
+	public final static BufferedImage[] bigs = new BufferedImage[4];
+	public final static BufferedImage[] meds = new BufferedImage[2];
+	public final static BufferedImage[] smalls = new BufferedImage[2];
+	public final static BufferedImage[] tinies = new BufferedImage[2];
 
 	// Explosion
-	public static BufferedImage[] explosion = new BufferedImage[9];
+	public final static BufferedImage[] explosion = new BufferedImage[9];
 
 	// Numbers
-	public static BufferedImage[] numbers = new BufferedImage[11];
+	public final static BufferedImage[] numbers = new BufferedImage[11];
 
 	// Others
 	public static BufferedImage life;
+
+	// Fonts
+	public static Font fontBig;
+	public static Font fontMed;
 
 	public static void init() {
 		player = Loader.imageLoader("/ships/player.png");
@@ -38,8 +43,11 @@ public class Assets {
 		redLaser = Loader.imageLoader("/lasers/laserRed.png");
 		blueLaser = Loader.imageLoader("/lasers/laserBlue.png");
 		greenLaser = Loader.imageLoader("/lasers/laserGreen.png");
-		
+
 		life = Loader.imageLoader("/other/life.png");
+
+		fontBig = Loader.loadFont("/fonts/futureFont.ttf", 42);
+		fontMed = Loader.loadFont("/fonts/futureFont.ttf", 20);
 
 		for (int i = 0; i < bigs.length; i++) {
 			bigs[i] = Loader.imageLoader(String.format("/meteors/big%d.png", (i + 1)));
