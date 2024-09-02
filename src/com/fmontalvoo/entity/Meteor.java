@@ -17,6 +17,7 @@ public class Meteor extends MovingObject {
 
 	private final static double DELTA_ANGLE = 0.01;
 
+	public static final int SCORE = 20;
 	public final static double MAX_VELOCITY = 2;
 
 	public Meteor(Vector position, Vector velocity, double maxVelocity, BufferedImage image, Size size,
@@ -77,6 +78,7 @@ public class Meteor extends MovingObject {
 
 	@Override
 	protected void destroy() {
+		state.addScore(SCORE);
 		divideMeteor(this);
 		super.destroy();
 	}

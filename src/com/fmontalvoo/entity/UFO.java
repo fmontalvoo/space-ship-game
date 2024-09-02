@@ -26,6 +26,7 @@ public class UFO extends MovingObject {
 	private final static int FIRE_RATE = 1000;
 	private final static double DELTA_ANGLE = 0.05;
 
+	public static final int SCORE = 40;
 	public static final double MASS = 60;
 	public static final int NODE_RADIUS = 160;
 	public final static double MAX_VELOCITY = 5;
@@ -131,6 +132,12 @@ public class UFO extends MovingObject {
 
 	private boolean edges() {
 		return ((getX() > Game.WIDTH + avg) || (getY() > Game.HEIGHT + avg) || (getX() < -avg) || (getY() < -avg));
+	}
+
+	@Override
+	protected void destroy() {
+		state.addScore(SCORE);
+		super.destroy();
 	}
 
 }

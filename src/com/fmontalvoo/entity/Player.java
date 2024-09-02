@@ -17,6 +17,7 @@ public class Player extends MovingObject {
 	private Vector acceleration;
 	private boolean accelerating = false;
 
+	private int lifes;
 	private final int avg;
 	private final Vector heading;
 	private final Chronometer fireRate;
@@ -35,6 +36,7 @@ public class Player extends MovingObject {
 
 		this.fireRate = new Chronometer();
 
+		this.lifes = 3;
 		// avg = (width + height) / 2
 		this.avg = (width + height) >> 1; // Calcula promedio
 	}
@@ -118,6 +120,14 @@ public class Player extends MovingObject {
 		if (getY() < -avg) {
 			setY(Game.HEIGHT);
 		}
+	}
+
+	public int getLifes() {
+		return lifes;
+	}
+
+	public void setLifes(int lifes) {
+		this.lifes = lifes;
 	}
 
 }

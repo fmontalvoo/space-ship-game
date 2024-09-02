@@ -26,12 +26,18 @@ public class GameState {
 	private final List<Animation> explosions = new ArrayList<>();
 	private final List<MovingObject> movingObjects = new ArrayList<>();
 
+	private int score = 0;
+
 	public GameState() {
 		this.meteors = 1;
 
 		this.player = new Player(new Vector(475, 281), new Vector(0, 0), Player.MAX_VELOCITY, Assets.player, this);
 
 		this.movingObjects.add(this.player);
+	}
+
+	public void addScore(int value) {
+		score += value;
 	}
 
 	public void update() {
@@ -73,6 +79,8 @@ public class GameState {
 			g2d.drawImage(anim.getCurrentFrame(), (int) anim.getX(), (int) anim.getY(), null);
 		}
 
+		drawScore(graphics);
+		drawLifes(graphics);
 	}
 
 	public void playExplosion(Vector position) {
@@ -130,6 +138,40 @@ public class GameState {
 
 		movingObjects.add(new UFO(new Vector(x, y), new Vector(), UFO.MAX_VELOCITY, Assets.ufo, path, this));
 
+	}
+
+	private void drawScore(Graphics g) {
+		Vector pos = new Vector(850, 25);
+
+		String scoreToString = Integer.toString(score);
+
+		for (int i = 0; i < scoreToString.length(); i++) {
+			g.drawImage(Assets.numbers[Integer.parseInt(scoreToString.substring(i, i + 1))], (int) pos.x, (int) pos.y,
+					null);
+			pos.x += 20;
+		}
+	}
+
+	private void drawLifes(Graphics g) {
+		Vector lifePos = new Vector(25, 25);
+
+		g.drawImage(Assets.life, (int) lifePos.x, (int) lifePos.y, null);
+
+		g.drawImage(Assets.numbers[10], (int) (lifePos.x + 40), (int) (lifePos.y + 5), null);
+
+		int lifes = this.player.getLifes();
+
+		String lifesToString = Integer.toString(lifes);
+
+		Vector pos = new Vector(lifePos.x, lifePos.y);
+
+		for (int i = 0; i < lifesToString.length(); i++) {
+			int number = Integer.parseInt(lifesToString.substring(i, i + 1));
+			if (number <= 0)
+				break;
+			g.drawImage(Assets.numbers[number], (int) (pos.x + 60), (int) (pos.y + 5), null);
+			pos.x += 20;
+		}
 	}
 
 	public List<MovingObject> getMovingObjects() {
