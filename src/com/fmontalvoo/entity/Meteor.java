@@ -19,8 +19,8 @@ public class Meteor extends MovingObject {
 
 	public final static double MAX_VELOCITY = 2;
 
-	public Meteor(Vector position, Vector velocity, double maxVelocity, BufferedImage image, GameState state,
-			Size size) {
+	public Meteor(Vector position, Vector velocity, double maxVelocity, BufferedImage image, Size size,
+			GameState state) {
 		super(position, velocity, maxVelocity, image, state);
 
 		this.size = size;
@@ -70,7 +70,7 @@ public class Meteor extends MovingObject {
 			state.getMovingObjects()
 					.add(new Meteor(meteor.getPosition().copy(), new Vector(0, 1).dir(Math.random() * (2 * Math.PI)),
 							Meteor.MAX_VELOCITY * Math.random() + 1, images[(int) (Math.random() * images.length)],
-							state, newSize));
+							newSize, state));
 		}
 
 	}

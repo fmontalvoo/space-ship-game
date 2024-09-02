@@ -25,11 +25,11 @@ public class Laser extends MovingObject {
 	public void update() {
 		position.add(velocity);
 
+		checkCollision();
+
 		if (edges()) {
 			destroy();
 		}
-
-		checkCollision();
 	}
 
 	@Override

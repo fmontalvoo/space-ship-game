@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 
 public class Assets {
 
+	// Ships
 	public static BufferedImage player;
+	public static BufferedImage ufo;
 
 	// Effects
 	public static BufferedImage fire;
@@ -23,6 +25,7 @@ public class Assets {
 
 	public static void init() {
 		player = Loader.imageLoader("/ships/player.png");
+		ufo = Loader.imageLoader("/ships/ufo.png");
 
 		fire = Loader.imageLoader("/effects/fire.png");
 

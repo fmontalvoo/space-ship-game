@@ -128,6 +128,16 @@ public class Vector {
 		return this;
 	}
 
+	public double angle() {
+		double magnitude = mag();
+		
+		if (magnitude != 0) {
+			return Math.asin(y / magnitude);
+		}
+		
+		return 0;
+	}
+
 	public Vector copy() {
 		return new Vector(this.x, this.y);
 	}

@@ -54,6 +54,11 @@ public abstract class MovingObject extends GameObject {
 		state.getMovingObjects().remove(this);
 	}
 
+	/**
+	 * Retorna un nuevo Vector que apunta al centro de la imagen del objeto.
+	 * 
+	 * @return Un nuevo Vector
+	 */
 	protected Vector center() {
 		return position.copy().add(halfWidth, halfHeight);
 	}
