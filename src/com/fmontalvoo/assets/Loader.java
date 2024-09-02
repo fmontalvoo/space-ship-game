@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Loader {
 
@@ -29,6 +33,17 @@ public class Loader {
 			log.severe(ex.getMessage());
 		}
 		return null;
+	}
+
+	public static Clip loadSound(String path) {
+		Clip clip = null;
+		try {
+			clip = AudioSystem.getClip();
+			clip.open(AudioSystem.getAudioInputStream(Loader.class.getResource(path)));
+		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
+			log.severe(ex.getMessage());
+		}
+		return clip;
 	}
 
 }

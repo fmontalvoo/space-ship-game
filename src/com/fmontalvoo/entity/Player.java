@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import com.fmontalvoo.Game;
 import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.assets.Sound;
 import com.fmontalvoo.input.KeyBoard;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.state.GameState;
@@ -20,6 +21,7 @@ public class Player extends MovingObject {
 
 	private final int avg;
 	private final Vector heading;
+	private final Sound shoot, loose;
 	private final Chronometer fireRate;
 	private final Chronometer spawnTime;
 	private final Chronometer flickerTime;
@@ -43,6 +45,9 @@ public class Player extends MovingObject {
 		this.fireRate = new Chronometer();
 		this.spawnTime = new Chronometer();
 		this.flickerTime = new Chronometer();
+
+		this.shoot = new Sound(Assets.playerShoot);
+		this.loose = new Sound(Assets.playerLoose);
 
 		this.lifes = 3;
 		// avg = (width + height) / 2
@@ -76,6 +81,11 @@ public class Player extends MovingObject {
 			state.getMovingObjects().add(0, new Laser(center().add(heading.copy().mult(width)), heading.copy(),
 					Laser.MAX_VELOCITY, angle, Assets.blueLaser, state));
 			fireRate.run(FIRE_RATE);
+			shoot.play();
+		}
+
+		if (shoot.getFramePosition() > 8500) {
+			shoot.stop();
 		}
 
 		if (KeyBoard.up) {
@@ -152,6 +162,7 @@ public class Player extends MovingObject {
 		spawning = true;
 		spawnTime.run(SPAWNING_TIME);
 		lifes--;
+		loose.play();
 		resetValues();
 
 		if (lifes == 0) {

@@ -91,8 +91,8 @@ public class GameState {
 
 	public void playExplosion(Vector position) {
 		explosions.add(new Animation(50,
-				position.sub(new Vector(Assets.explosion[0].getWidth() >> 1, Assets.explosion[0].getHeight() >> 1)),
-				Assets.explosion));
+				position.sub(new Vector(Assets.explosions[0].getWidth() >> 1, Assets.explosions[0].getHeight() >> 1)),
+				Assets.explosions));
 	}
 
 	private void startWave() {

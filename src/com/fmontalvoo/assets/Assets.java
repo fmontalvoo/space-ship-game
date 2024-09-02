@@ -3,6 +3,8 @@ package com.fmontalvoo.assets;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
 
+import javax.sound.sampled.Clip;
+
 public class Assets {
 
 	// Ships
@@ -22,7 +24,7 @@ public class Assets {
 	public final static BufferedImage[] tinies = new BufferedImage[2];
 
 	// Explosion
-	public final static BufferedImage[] explosion = new BufferedImage[9];
+	public final static BufferedImage[] explosions = new BufferedImage[9];
 
 	// Numbers
 	public final static BufferedImage[] numbers = new BufferedImage[11];
@@ -33,6 +35,9 @@ public class Assets {
 	// Fonts
 	public static Font fontBig;
 	public static Font fontMed;
+
+	// Sounds
+	public static Clip backgroundMusic, explosion, playerShoot, playerLoose, ufoShoot;
 
 	public static void init() {
 		player = Loader.imageLoader("/ships/player.png");
@@ -65,13 +70,19 @@ public class Assets {
 			tinies[i] = Loader.imageLoader(String.format("/meteors/tiny%d.png", (i + 1)));
 		}
 
-		for (int i = 0; i < explosion.length; i++) {
-			explosion[i] = Loader.imageLoader(String.format("/explosion/%d.png", i));
+		for (int i = 0; i < explosions.length; i++) {
+			explosions[i] = Loader.imageLoader(String.format("/explosion/%d.png", i));
 		}
 
 		for (int i = 0; i < numbers.length; i++) {
 			numbers[i] = Loader.imageLoader(String.format("/numbers/%d.png", i));
 		}
+
+		ufoShoot = Loader.loadSound("/sounds/ufoShoot.wav");
+		explosion = Loader.loadSound("/sounds/explosion.wav");
+		playerShoot = Loader.loadSound("/sounds/playerShoot.wav");
+		playerLoose = Loader.loadSound("/sounds/playerLoose.wav");
+		backgroundMusic = Loader.loadSound("/sounds/backgroundMusic.wav");
 	}
 
 }
