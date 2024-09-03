@@ -18,6 +18,7 @@ import com.fmontalvoo.entity.MovingObject;
 import com.fmontalvoo.entity.Player;
 import com.fmontalvoo.entity.UFO;
 import com.fmontalvoo.math.Vector;
+import com.fmontalvoo.util.Chronometer;
 import com.fmontalvoo.util.Message;
 import com.fmontalvoo.util.Size;
 
@@ -25,14 +26,21 @@ public class GameState extends State {
 
 	private int waves;
 	private int meteors;
+	private boolean gameOver;
 
 	private final HUD hud;
 	private final Sound music;
 	private final Player player;
+	private final Chronometer ufoSpawner;
+	private final Chronometer gameOverTimer;
 
 	private final List<Message> messages = new ArrayList<>();
 	private final List<Animation> explosions = new ArrayList<>();
 	private final List<MovingObject> movingObjects = new ArrayList<>();
+
+	private static final long GAME_OVER_TIME = 2000;
+	private static final Vector PLAYER_START_POSITION = new Vector((Game.WIDTH / 2) - (Assets.player.getWidth() / 2),
+			(Game.HEIGHT / 2) - (Assets.player.getHeight() / 2));
 
 	public GameState() {
 		this.waves = 1;
@@ -46,12 +54,25 @@ public class GameState extends State {
 		this.music = new Sound(Assets.backgroundMusic);
 		this.music.loop();
 		this.music.changeVolume(-10.0f);
+
+		this.ufoSpawner = new Chronometer();
+		this.ufoSpawner.run(UFO.SPAWN_RATE);
+
+		this.gameOver = false;
+
+		this.gameOverTimer = new Chronometer();
 	}
 
 	@Override
 	public void update() {
 		for (int i = 0; i < movingObjects.size(); i++) {
-			movingObjects.get(i).update();
+			MovingObject mo = movingObjects.get(i);
+
+			mo.update();
+
+			if (mo.isDestroyed()) {
+				movingObjects.remove(i--);
+			}
 		}
 
 		for (int i = 0; i < explosions.size(); i++) {
@@ -64,6 +85,18 @@ public class GameState extends State {
 			}
 		}
 
+		if (gameOver && !gameOverTimer.isRunning()) {
+			State.setCurrentState(new MenuState());
+		}
+
+		if (!ufoSpawner.isRunning()) {
+			ufoSpawner.run(UFO.SPAWN_RATE);
+			spawnUFO();
+		}
+
+		gameOverTimer.update();
+		ufoSpawner.update();
+
 		for (int i = 0; i < movingObjects.size(); i++) {
 			if (movingObjects.get(i) instanceof Meteor) {
 				return;
@@ -71,7 +104,6 @@ public class GameState extends State {
 		}
 
 		startWave();
-		spawnUFO();
 	}
 
 	@Override
@@ -90,7 +122,13 @@ public class GameState extends State {
 		}
 
 		for (int i = 0; i < messages.size(); i++) {
-			messages.get(i).draw(g2d);
+			Message m = messages.get(i);
+
+			m.draw(g2d);
+
+			if (m.isDestroyed()) {
+				messages.remove(i);
+			}
 		}
 
 		hud.drawScore(g);
@@ -107,7 +145,7 @@ public class GameState extends State {
 		double x, y;
 
 		messages.add(new Message(new Vector(Game.WIDTH >> 1, Game.HEIGHT >> 1), String.format("WAVE %d", waves),
-				Assets.fontBig, Color.WHITE, true, false, this));
+				Assets.fontBig, Color.WHITE, true, false));
 
 		for (int i = 0; i < meteors; i++) {
 			x = (i % 2 == 0) ? Math.random() * Game.WIDTH : 0;
@@ -160,8 +198,16 @@ public class GameState extends State {
 
 	public void addScore(int value, Vector position) {
 		hud.addScore(value);
-		messages.add(new Message(position, String.format("+%d score", value), Assets.fontMed, Color.WHITE, false, true,
-				this));
+		messages.add(
+				new Message(position, String.format("+%d score", value), Assets.fontMed, Color.WHITE, false, true));
+	}
+
+	public void gameOver() {
+		Message gameOverMsg = new Message(PLAYER_START_POSITION, "GAME OVER", Assets.fontBig, Color.WHITE, true, true);
+
+		this.messages.add(gameOverMsg);
+		gameOverTimer.run(GAME_OVER_TIME);
+		gameOver = true;
 	}
 
 	public List<MovingObject> getMovingObjects() {

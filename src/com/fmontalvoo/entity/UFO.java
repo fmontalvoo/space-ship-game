@@ -31,6 +31,7 @@ public class UFO extends MovingObject {
 	private static final double DELTA_ANGLE = 0.05;
 	private static final double ANGLE_RANGE = Math.PI / 2;
 
+	public static final int SPAWN_RATE = 10000;
 	public static final double MAX_VELOCITY = 5;
 
 	public UFO(Vector position, Vector velocity, double maxVelocity, BufferedImage image, List<Vector> path,

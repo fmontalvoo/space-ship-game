@@ -14,6 +14,7 @@ public abstract class MovingObject extends GameObject {
 
 	protected double angle;
 	protected Vector velocity;
+	protected boolean destroyed;
 	protected AffineTransform transform;
 
 	private final Sound explosion;
@@ -23,6 +24,7 @@ public abstract class MovingObject extends GameObject {
 		super(position, image, state);
 
 		this.angle = 0;
+		this.destroyed = false;
 		this.velocity = velocity;
 		this.maxVelocity = maxVelocity;
 
@@ -33,16 +35,16 @@ public abstract class MovingObject extends GameObject {
 		List<MovingObject> movingObjects = state.getMovingObjects();
 
 		for (int i = 0; i < movingObjects.size(); i++) {
-			MovingObject movingObject = movingObjects.get(i);
+			MovingObject mo = movingObjects.get(i);
 
-			if (movingObject.equals(this)) {
+			if (mo.equals(this)) {
 				continue;
 			}
 
-			double distance = movingObject.center().dist(center());
+			double distance = mo.center().dist(center());
 
-			if (movingObjects.contains(this) && distance < movingObject.halfWidth + halfWidth) {
-				objectCollision(movingObject, this);
+			if (movingObjects.contains(this) && (distance < mo.halfWidth + halfWidth) && !destroyed && !mo.destroyed) {
+				objectCollision(mo, this);
 			}
 
 		}
@@ -64,10 +66,10 @@ public abstract class MovingObject extends GameObject {
 	}
 
 	protected void destroy() {
+		destroyed = true;
 		if (!(this instanceof Laser)) {
 			explosion.play();
 		}
-		state.getMovingObjects().remove(this);
 	}
 
 	/**
@@ -77,6 +79,10 @@ public abstract class MovingObject extends GameObject {
 	 */
 	protected Vector center() {
 		return position.copy().add(halfWidth, halfHeight);
+	}
+
+	public boolean isDestroyed() {
+		return destroyed;
 	}
 
 	@Override

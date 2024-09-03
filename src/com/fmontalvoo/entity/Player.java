@@ -166,6 +166,7 @@ public class Player extends MovingObject {
 		resetValues();
 
 		if (lifes == 0) {
+			state.gameOver();
 			super.destroy();
 		}
 	}
