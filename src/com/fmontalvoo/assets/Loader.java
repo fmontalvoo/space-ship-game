@@ -16,7 +16,7 @@ public class Loader {
 
 	private static final Logger log = Logger.getLogger(Loader.class.getName());
 
-	public static BufferedImage imageLoader(String path) {
+	public static BufferedImage loadImage(String path) {
 		try {
 			return ImageIO.read(Loader.class.getResource(path));
 		} catch (IOException ex) {

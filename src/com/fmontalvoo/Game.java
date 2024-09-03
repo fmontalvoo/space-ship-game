@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import com.fmontalvoo.assets.Assets;
 import com.fmontalvoo.input.KeyBoard;
 import com.fmontalvoo.input.MouseInput;
-import com.fmontalvoo.state.MenuState;
+import com.fmontalvoo.state.LoadingState;
 import com.fmontalvoo.state.State;
 
 public class Game extends JFrame implements Runnable {
@@ -66,8 +66,14 @@ public class Game extends JFrame implements Runnable {
 	}
 
 	private void init() {
-		Assets.init();
-		State.setCurrentState(new MenuState());
+		Thread loading = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Assets.init();
+			}
+		});
+
+		State.setCurrentState(new LoadingState(loading));
 	}
 
 	private void update() {
@@ -89,9 +95,9 @@ public class Game extends JFrame implements Runnable {
 		graphics.setColor(Color.BLACK);
 		graphics.fillRect(0, 0, WIDTH, HEIGHT);
 		Font originalFont = graphics.getFont();
-		
+
 		State.getCurrentState().draw(graphics);
-		
+
 		graphics.setFont(originalFont);
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(String.format("FPS: %d", averageFPS), 0, 10);
