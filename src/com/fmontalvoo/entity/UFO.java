@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.fmontalvoo.Game;
 import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.assets.Sound;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.state.GameState;
 import com.fmontalvoo.util.Chronometer;
@@ -19,6 +20,7 @@ public class UFO extends MovingObject {
 	private Vector currentNode;
 
 	private final int avg;
+	private final Sound shoot;
 	private final List<Vector> path;
 	private final Chronometer fireRate;
 
@@ -41,6 +43,8 @@ public class UFO extends MovingObject {
 		this.following = true;
 		this.avg = (width + height) >> 1;
 
+		this.shoot = new Sound(Assets.ufoShoot);
+		
 		this.fireRate = new Chronometer();
 		this.fireRate.run(FIRE_RATE);
 	}
@@ -80,7 +84,13 @@ public class UFO extends MovingObject {
 
 			state.getMovingObjects().add(0, laser);
 
+			shoot.play();
+			
 			fireRate.run(FIRE_RATE);
+		}
+		
+		if (shoot.getFramePosition() > 8500) {
+			shoot.stop();
 		}
 
 		fireRate.update();

@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Objects;
 
+import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.assets.Sound;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.state.GameState;
 
@@ -12,8 +14,10 @@ public abstract class MovingObject extends GameObject {
 
 	protected double angle;
 	protected Vector velocity;
-	protected final double maxVelocity;
 	protected AffineTransform transform;
+
+	private final Sound explosion;
+	protected final double maxVelocity;
 
 	public MovingObject(Vector position, Vector velocity, double maxVelocity, BufferedImage image, GameState state) {
 		super(position, image, state);
@@ -21,6 +25,8 @@ public abstract class MovingObject extends GameObject {
 		this.angle = 0;
 		this.velocity = velocity;
 		this.maxVelocity = maxVelocity;
+
+		this.explosion = new Sound(Assets.explosion);
 	}
 
 	protected void checkCollision() {
@@ -58,6 +64,9 @@ public abstract class MovingObject extends GameObject {
 	}
 
 	protected void destroy() {
+		if (!(this instanceof Laser)) {
+			explosion.play();
+		}
 		state.getMovingObjects().remove(this);
 	}
 

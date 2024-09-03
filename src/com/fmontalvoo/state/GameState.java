@@ -11,6 +11,7 @@ import java.util.List;
 import com.fmontalvoo.Game;
 import com.fmontalvoo.assets.Animation;
 import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.assets.Sound;
 import com.fmontalvoo.entity.HUD;
 import com.fmontalvoo.entity.Meteor;
 import com.fmontalvoo.entity.MovingObject;
@@ -26,6 +27,7 @@ public class GameState {
 	private int meteors;
 
 	private final HUD hud;
+	private final Sound music;
 	private final Player player;
 
 	private final List<Message> messages = new ArrayList<>();
@@ -40,6 +42,10 @@ public class GameState {
 		this.hud = new HUD(0, this.player);
 
 		this.movingObjects.add(this.player);
+
+		this.music = new Sound(Assets.backgroundMusic);
+		this.music.loop();
+		this.music.changeVolume(-10.0f);
 	}
 
 	public void update() {
