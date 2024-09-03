@@ -64,11 +64,11 @@ public class GameState extends State {
 	}
 
 	@Override
-	public void update() {
+	public void update(float dt) {
 		for (int i = 0; i < movingObjects.size(); i++) {
 			MovingObject mo = movingObjects.get(i);
 
-			mo.update();
+			mo.update(dt);
 
 			if (mo.isDestroyed()) {
 				movingObjects.remove(i--);

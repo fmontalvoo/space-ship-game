@@ -11,7 +11,6 @@ import com.fmontalvoo.assets.Sound;
 import com.fmontalvoo.input.KeyBoard;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.state.GameState;
-import com.fmontalvoo.util.Chronometer;
 
 public class Player extends MovingObject {
 
@@ -22,9 +21,7 @@ public class Player extends MovingObject {
 	private final int avg;
 	private final Vector heading;
 	private final Sound shoot, loose;
-	private final Chronometer fireRate;
-	private final Chronometer spawnTime;
-	private final Chronometer flickerTime;
+	private long fireRate, spawnTime, flickerTime;
 
 	private static final int FIRE_RATE = 200;
 	private static final long FLICKER_TIME = 200;
@@ -42,12 +39,14 @@ public class Player extends MovingObject {
 		this.heading = new Vector(0, 1);
 		this.acceleration = new Vector();
 
-		this.fireRate = new Chronometer();
-		this.spawnTime = new Chronometer();
-		this.flickerTime = new Chronometer();
-
 		this.shoot = new Sound(Assets.playerShoot);
 		this.loose = new Sound(Assets.playerLoose);
+
+		this.visible = true;
+
+		this.fireRate = 0;
+		this.spawnTime = 0;
+		this.flickerTime = 0;
 
 		this.lifes = 3;
 		// avg = (width + height) / 2
@@ -55,19 +54,9 @@ public class Player extends MovingObject {
 	}
 
 	@Override
-	public void update() {
+	public void update(float dt) {
 
-		if (!spawnTime.isRunning()) {
-			spawning = false;
-			visible = true;
-		}
-
-		if (spawning) {
-			if (!flickerTime.isRunning()) {
-				flickerTime.run(FLICKER_TIME);
-				visible = !visible;
-			}
-		}
+		fireRate += dt;
 
 		if (KeyBoard.right) {
 			angle += DELTA_ANGLE;
@@ -77,11 +66,11 @@ public class Player extends MovingObject {
 			angle -= DELTA_ANGLE;
 		}
 
-		if (KeyBoard.fire && !fireRate.isRunning() && !spawning) {
+		if (KeyBoard.fire && fireRate >= FIRE_RATE && !spawning) {
 			state.getMovingObjects().add(0, new Laser(center().add(heading.copy().mult(width)), heading.copy(),
 					Laser.MAX_VELOCITY, angle, Assets.blueLaser, state));
-			fireRate.run(FIRE_RATE);
 			shoot.play();
+			fireRate = 0;
 		}
 
 		if (shoot.getFramePosition() > 8500) {
@@ -99,6 +88,21 @@ public class Player extends MovingObject {
 			acceleration = Vector.mult(velocity.copy().normalize(), -ACCELERATION / 2);
 		}
 
+		if (spawning) {
+			flickerTime += dt;
+			spawnTime += dt;
+
+			if (flickerTime >= FLICKER_TIME) {
+				visible = !visible;
+				flickerTime = 0;
+			}
+
+			if (spawnTime >= SPAWNING_TIME) {
+				spawning = false;
+				visible = true;
+			}
+		}
+
 		velocity.add(acceleration).limit(maxVelocity);
 
 		heading.dir(angle - Math.PI / 2);
@@ -106,10 +110,6 @@ public class Player extends MovingObject {
 		position.add(velocity);
 
 		edges();
-
-		fireRate.update();
-		spawnTime.update();
-		flickerTime.update();
 
 		checkCollision();
 	}
@@ -159,9 +159,9 @@ public class Player extends MovingObject {
 
 	@Override
 	protected void destroy() {
-		spawning = true;
-		spawnTime.run(SPAWNING_TIME);
 		lifes--;
+		spawnTime = 0;
+		spawning = true;
 		loose.play();
 		resetValues();
 

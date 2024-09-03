@@ -76,9 +76,9 @@ public class Game extends JFrame implements Runnable {
 		State.setCurrentState(new LoadingState(loading));
 	}
 
-	private void update() {
+	private void update(float dt) {
 		keyBoard.update();
-		State.getCurrentState().update();
+		State.getCurrentState().update(dt);
 	}
 
 	private void draw() {
@@ -120,12 +120,13 @@ public class Game extends JFrame implements Runnable {
 		while (running) {
 
 			now = System.nanoTime();
-			time += (now - lastTime);
-			delta += (now - lastTime) / TARGET_TIME;
+			long diff = now - lastTime;
+			time += diff;
+			delta += diff / TARGET_TIME;
 			lastTime = now;
 
 			if (delta >= 1) {
-				update();
+				update((float) (delta * TARGET_TIME * 0.000001f)); // Convierte a milisegundos
 				draw();
 				delta--;
 				frames++;

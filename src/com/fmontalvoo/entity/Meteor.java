@@ -31,7 +31,7 @@ public class Meteor extends MovingObject {
 	}
 
 	@Override
-	public void update() {
+	public void update(float dt) {
 		position.add(velocity);
 
 		edges();

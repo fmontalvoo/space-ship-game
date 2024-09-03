@@ -51,7 +51,7 @@ public class UFO extends MovingObject {
 	}
 
 	@Override
-	public void update() {
+	public void update(float dt) {
 		Vector pathFollowing;
 
 		if (following) {

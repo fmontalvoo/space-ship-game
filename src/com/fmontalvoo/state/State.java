@@ -6,7 +6,7 @@ public abstract class State {
 
 	private static State currentState = null;
 
-	public abstract void update();
+	public abstract void update(float dt);
 
 	public abstract void draw(Graphics g);
 

@@ -46,7 +46,7 @@ public class ScoreState extends State {
 	}
 
 	@Override
-	public void update() {
+	public void update(float dt) {
 		backButton.update();
 	}
 

@@ -28,7 +28,7 @@ public abstract class GameObject {
 		this.halfHeight = this.height >> 1; // height / 2
 	}
 
-	public abstract void update();
+	public abstract void update(float dt);
 
 	public abstract void draw(Graphics graphics);
 
