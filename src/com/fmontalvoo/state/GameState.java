@@ -12,13 +12,13 @@ import com.fmontalvoo.Game;
 import com.fmontalvoo.assets.Animation;
 import com.fmontalvoo.assets.Assets;
 import com.fmontalvoo.assets.Sound;
-import com.fmontalvoo.entity.HUD;
 import com.fmontalvoo.entity.Meteor;
 import com.fmontalvoo.entity.MovingObject;
 import com.fmontalvoo.entity.Player;
 import com.fmontalvoo.entity.UFO;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.util.Chronometer;
+import com.fmontalvoo.util.HUD;
 import com.fmontalvoo.util.Message;
 import com.fmontalvoo.util.Size;
 

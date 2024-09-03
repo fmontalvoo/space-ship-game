@@ -1,8 +1,9 @@
-package com.fmontalvoo.entity;
+package com.fmontalvoo.util;
 
 import java.awt.Graphics;
 
 import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.entity.Player;
 import com.fmontalvoo.math.Vector;
 
 public class HUD {
