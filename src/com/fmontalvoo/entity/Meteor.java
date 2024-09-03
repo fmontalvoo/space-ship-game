@@ -67,6 +67,7 @@ public class Meteor extends MovingObject {
 		default:
 			return;
 		}
+		
 		for (int i = 0; i < size.quantity; i++) {
 			state.getMovingObjects()
 					.add(new Meteor(meteor.getPosition().copy(), new Vector(0, 1).dir(Math.random() * (2 * Math.PI)),

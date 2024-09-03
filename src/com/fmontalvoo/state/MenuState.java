@@ -13,6 +13,7 @@ public class MenuState extends State {
 
 	private static final String PLAY = "PLAY";
 	private static final String EXIT = "EXIT";
+	private static final String HIGH_SCORES = "HIGHEST SCORES";
 
 	private final List<Button> buttons = new ArrayList<>();
 
@@ -20,23 +21,29 @@ public class MenuState extends State {
 		int width = Assets.greyBtn.getWidth();
 		int height = Assets.greyBtn.getHeight();
 		int halfWidth = width >> 1;
-		int halfHeight = height >> 1;
 
-		buttons.add(new Button((Game.WIDTH >> 1) - halfWidth, (Game.HEIGHT >> 1) - height, PLAY, new Action() {
+		buttons.add(
+				new Button(((Game.WIDTH >> 1) - halfWidth), ((Game.HEIGHT >> 1) - (2 * height)), PLAY, new Action() {
+					@Override
+					public void onClick() {
+						State.setCurrentState(new GameState());
+					}
+				}, Assets.blueBtn, Assets.greyBtn));
+
+		buttons.add(new Button(((Game.WIDTH >> 1) - halfWidth), (Game.HEIGHT >> 1), HIGH_SCORES, new Action() {
 			@Override
 			public void onClick() {
-				State.setCurrentState(new GameState());
-
+				State.setCurrentState(new ScoreState());
 			}
 		}, Assets.blueBtn, Assets.greyBtn));
 
-		buttons.add(new Button((Game.WIDTH >> 1) - halfWidth, (Game.HEIGHT >> 1) + halfHeight, EXIT, new Action() {
-			@Override
-			public void onClick() {
-				System.exit(0);
-
-			}
-		}, Assets.blueBtn, Assets.greyBtn));
+		buttons.add(
+				new Button(((Game.WIDTH >> 1) - halfWidth), ((Game.HEIGHT >> 1) + (2 * height)), EXIT, new Action() {
+					@Override
+					public void onClick() {
+						System.exit(0);
+					}
+				}, Assets.blueBtn, Assets.greyBtn));
 	}
 
 	@Override
