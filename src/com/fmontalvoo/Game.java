@@ -3,6 +3,7 @@ package com.fmontalvoo;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.logging.Logger;
@@ -11,7 +12,9 @@ import javax.swing.JFrame;
 
 import com.fmontalvoo.assets.Assets;
 import com.fmontalvoo.input.KeyBoard;
-import com.fmontalvoo.state.GameState;
+import com.fmontalvoo.input.MouseInput;
+import com.fmontalvoo.state.MenuState;
+import com.fmontalvoo.state.State;
 
 public class Game extends JFrame implements Runnable {
 
@@ -30,7 +33,7 @@ public class Game extends JFrame implements Runnable {
 	private Thread thread;
 	private Graphics graphics;
 	private KeyBoard keyBoard;
-	private GameState gameState;
+	private MouseInput mouseInput;
 	private int averageFPS = FPS;
 	private BufferStrategy strategy;
 	private volatile boolean running = false;
@@ -47,6 +50,7 @@ public class Game extends JFrame implements Runnable {
 
 		canvas = new Canvas();
 		keyBoard = new KeyBoard();
+		mouseInput = new MouseInput();
 
 		canvas.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		canvas.setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -55,18 +59,20 @@ public class Game extends JFrame implements Runnable {
 
 		add(canvas);
 		canvas.addKeyListener(keyBoard);
+		canvas.addMouseListener(mouseInput);
+		canvas.addMouseMotionListener(mouseInput);
 
 		setVisible(true);
 	}
 
 	private void init() {
 		Assets.init();
-		gameState = new GameState();
+		State.setCurrentState(new MenuState());
 	}
 
 	private void update() {
 		keyBoard.update();
-		gameState.update();
+		State.getCurrentState().update();
 	}
 
 	private void draw() {
@@ -82,9 +88,11 @@ public class Game extends JFrame implements Runnable {
 
 		graphics.setColor(Color.BLACK);
 		graphics.fillRect(0, 0, WIDTH, HEIGHT);
-
-		gameState.draw(graphics);
-
+		Font originalFont = graphics.getFont();
+		
+		State.getCurrentState().draw(graphics);
+		
+		graphics.setFont(originalFont);
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(String.format("FPS: %d", averageFPS), 0, 10);
 

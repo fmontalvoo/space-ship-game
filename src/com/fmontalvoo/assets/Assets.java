@@ -36,6 +36,10 @@ public class Assets {
 	public static Font fontBig;
 	public static Font fontMed;
 
+	// UI
+	public static BufferedImage blueBtn;
+	public static BufferedImage greyBtn;
+
 	// Sounds
 	public static Clip backgroundMusic, explosion, playerShoot, playerLoose, ufoShoot;
 
@@ -51,6 +55,9 @@ public class Assets {
 
 		life = Loader.imageLoader("/other/life.png");
 
+		blueBtn = Loader.imageLoader("/ui/blue_button.png");
+		greyBtn = Loader.imageLoader("/ui/grey_button.png");
+		
 		fontBig = Loader.loadFont("/fonts/futureFont.ttf", 42);
 		fontMed = Loader.loadFont("/fonts/futureFont.ttf", 20);
 

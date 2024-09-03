@@ -40,9 +40,9 @@ public class Message {
 
 	public void draw(Graphics2D g2d) {
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-		Font originalFont = g2d.getFont();
+		
 		Text.drawText(g2d, text, position, color, font, center);
-		g2d.setFont(originalFont);
+		
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 		position.y -= 1;

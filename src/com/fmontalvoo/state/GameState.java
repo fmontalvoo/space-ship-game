@@ -21,7 +21,7 @@ import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.util.Message;
 import com.fmontalvoo.util.Size;
 
-public class GameState {
+public class GameState extends State {
 
 	private int waves;
 	private int meteors;
@@ -48,6 +48,7 @@ public class GameState {
 		this.music.changeVolume(-10.0f);
 	}
 
+	@Override
 	public void update() {
 		for (int i = 0; i < movingObjects.size(); i++) {
 			movingObjects.get(i).update();
@@ -73,12 +74,13 @@ public class GameState {
 		spawnUFO();
 	}
 
-	public void draw(Graphics graphics) {
-		Graphics2D g2d = (Graphics2D) graphics;
+	@Override
+	public void draw(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
 		for (int i = 0; i < movingObjects.size(); i++) {
-			movingObjects.get(i).draw(graphics);
+			movingObjects.get(i).draw(g);
 		}
 
 		for (int i = 0; i < explosions.size(); i++) {
@@ -91,8 +93,8 @@ public class GameState {
 			messages.get(i).draw(g2d);
 		}
 
-		hud.drawScore(graphics);
-		hud.drawLifes(graphics);
+		hud.drawScore(g);
+		hud.drawLifes(g);
 	}
 
 	public void playExplosion(Vector position) {

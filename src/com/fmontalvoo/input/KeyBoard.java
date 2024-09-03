@@ -1,9 +1,9 @@
 package com.fmontalvoo.input;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class KeyBoard implements KeyListener {
+public class KeyBoard extends KeyAdapter {
 
 	private static final int NUMBER_OF_KEYS = 50;
 	private final boolean[] keys = new boolean[NUMBER_OF_KEYS];
@@ -34,11 +34,6 @@ public class KeyBoard implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent evt) {
 		keys[evt.getKeyCode()] = false;
-	}
-
-	@Override
-	public void keyTyped(KeyEvent evt) {
-
 	}
 
 }
