@@ -5,8 +5,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.fmontalvoo.Game;
 import com.fmontalvoo.assets.Animation;
@@ -16,6 +18,8 @@ import com.fmontalvoo.entity.Meteor;
 import com.fmontalvoo.entity.MovingObject;
 import com.fmontalvoo.entity.Player;
 import com.fmontalvoo.entity.UFO;
+import com.fmontalvoo.io.JSONParser;
+import com.fmontalvoo.io.ScoreData;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.util.HUD;
 import com.fmontalvoo.util.Message;
@@ -40,6 +44,8 @@ public class GameState extends State {
 	private static final long GAME_OVER_TIME = 2000;
 	private static final Vector PLAYER_START_POSITION = new Vector((Game.WIDTH / 2) - (Assets.player.getWidth() / 2),
 			(Game.HEIGHT / 2) - (Assets.player.getHeight() / 2));
+
+	private static final Logger log = Logger.getLogger(GameState.class.getName());
 
 	public GameState() {
 		this.waves = 1;
@@ -88,6 +94,14 @@ public class GameState extends State {
 		}
 
 		if (gameOverTimer >= GAME_OVER_TIME) {
+			try {
+				List<ScoreData> scoreList = JSONParser.readFile();
+				scoreList.add(new ScoreData(hud.getScore()));
+				JSONParser.writeFile(scoreList);
+			} catch (IOException ex) {
+				log.severe(ex.getMessage());
+			}
+
 			this.music.stop();
 			State.setCurrentState(new MenuState());
 		}
@@ -98,7 +112,7 @@ public class GameState extends State {
 		}
 
 		ufoSpawner += dt;
-		
+
 		for (int i = 0; i < movingObjects.size(); i++) {
 			if (movingObjects.get(i) instanceof Meteor) {
 				return;
@@ -158,7 +172,7 @@ public class GameState extends State {
 			movingObjects.add(new Meteor(new Vector(x, y), new Vector(0, 1).dir(Math.random() * (2 * Math.PI)),
 					Meteor.MAX_VELOCITY * Math.random() + 1, image, Size.BIG, this));
 		}
-		
+
 		waves++;
 		meteors++;
 	}

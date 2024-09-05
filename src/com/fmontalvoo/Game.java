@@ -9,6 +9,7 @@ import java.awt.image.BufferStrategy;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
+import javax.swing.filechooser.FileSystemView;
 
 import com.fmontalvoo.assets.Assets;
 import com.fmontalvoo.input.KeyBoard;
@@ -21,6 +22,8 @@ public class Game extends JFrame implements Runnable {
 	private static final long serialVersionUID = -1072612083774705497L;
 
 	public static final int WIDTH = 1000, HEIGHT = 600; // Alto y ancho
+	public static final String SCORE_PATH = FileSystemView.getFileSystemView().getDefaultDirectory().getPath()
+			+ "\\Space_Ship_Game\\data.json";
 
 	// Variables para controlar los frames por segundo
 	private double delta = 0;

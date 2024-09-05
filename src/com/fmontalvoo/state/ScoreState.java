@@ -2,12 +2,16 @@ package com.fmontalvoo.state;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.PriorityQueue;
+import java.util.logging.Logger;
 
 import com.fmontalvoo.Game;
 import com.fmontalvoo.assets.Assets;
+import com.fmontalvoo.io.JSONParser;
 import com.fmontalvoo.io.ScoreData;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.ui.Action;
@@ -25,10 +29,12 @@ public class ScoreState extends State {
 	private static final String SCORE = "SCORE";
 	private static final String BACK = "GO BACK";
 
+	private static final Logger log = Logger.getLogger(ScoreState.class.getName());
+
 	public ScoreState() {
 
-		this.backButton = new Button(Assets.greyBtn.getHeight(), (Game.HEIGHT - (2 * Assets.greyBtn.getHeight())),
-				BACK, new Action() {
+		this.backButton = new Button(Assets.greyBtn.getHeight(), (Game.HEIGHT - (2 * Assets.greyBtn.getHeight())), BACK,
+				new Action() {
 					@Override
 					public void onClick() {
 						State.setCurrentState(new MenuState());
@@ -43,6 +49,21 @@ public class ScoreState extends State {
 		};
 
 		this.highScores = new PriorityQueue<ScoreData>(10, scoreComparator);
+
+		try {
+			List<ScoreData> scoreList = JSONParser.readFile();
+
+			for (ScoreData score : scoreList) {
+				highScores.add(score);
+			}
+
+			while (highScores.size() > 10) {
+				highScores.poll();
+			}
+
+		} catch (FileNotFoundException ex) {
+			log.severe(ex.getMessage());
+		}
 	}
 
 	@Override
