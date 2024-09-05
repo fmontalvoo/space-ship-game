@@ -17,7 +17,6 @@ import com.fmontalvoo.entity.MovingObject;
 import com.fmontalvoo.entity.Player;
 import com.fmontalvoo.entity.UFO;
 import com.fmontalvoo.math.Vector;
-import com.fmontalvoo.util.Chronometer;
 import com.fmontalvoo.util.HUD;
 import com.fmontalvoo.util.Message;
 import com.fmontalvoo.util.Size;
@@ -26,13 +25,13 @@ public class GameState extends State {
 
 	private int waves;
 	private int meteors;
+	private long ufoSpawner;
 	private boolean gameOver;
+	private long gameOverTimer;
 
 	private final HUD hud;
 	private final Sound music;
 	private final Player player;
-	private final Chronometer ufoSpawner;
-	private final Chronometer gameOverTimer;
 
 	private final List<Message> messages = new ArrayList<>();
 	private final List<Animation> explosions = new ArrayList<>();
@@ -55,12 +54,11 @@ public class GameState extends State {
 		this.music.loop();
 		this.music.changeVolume(-10.0f);
 
-		this.ufoSpawner = new Chronometer();
-		this.ufoSpawner.run(UFO.SPAWN_RATE);
+		this.ufoSpawner = 0;
 
 		this.gameOver = false;
 
-		this.gameOverTimer = new Chronometer();
+		this.gameOverTimer = 0;
 	}
 
 	@Override
@@ -85,18 +83,22 @@ public class GameState extends State {
 			}
 		}
 
-		if (gameOver && !gameOverTimer.isRunning()) {
+		if (gameOver) {
+			gameOverTimer += dt;
+		}
+
+		if (gameOverTimer >= GAME_OVER_TIME) {
+			this.music.stop();
 			State.setCurrentState(new MenuState());
 		}
 
-		if (!ufoSpawner.isRunning()) {
-			ufoSpawner.run(UFO.SPAWN_RATE);
+		if (ufoSpawner >= UFO.SPAWN_RATE) {
 			spawnUFO();
+			ufoSpawner = 0;
 		}
 
-		gameOverTimer.update();
-		ufoSpawner.update();
-
+		ufoSpawner += dt;
+		
 		for (int i = 0; i < movingObjects.size(); i++) {
 			if (movingObjects.get(i) instanceof Meteor) {
 				return;
@@ -205,9 +207,8 @@ public class GameState extends State {
 	public void gameOver() {
 		Message gameOverMsg = new Message(PLAYER_START_POSITION, "GAME OVER", Assets.fontBig, Color.WHITE, true, true);
 
-		this.messages.add(gameOverMsg);
-		gameOverTimer.run(GAME_OVER_TIME);
 		gameOver = true;
+		this.messages.add(gameOverMsg);
 	}
 
 	public List<MovingObject> getMovingObjects() {

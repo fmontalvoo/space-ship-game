@@ -11,18 +11,17 @@ import com.fmontalvoo.assets.Assets;
 import com.fmontalvoo.assets.Sound;
 import com.fmontalvoo.math.Vector;
 import com.fmontalvoo.state.GameState;
-import com.fmontalvoo.util.Chronometer;
 
 public class UFO extends MovingObject {
 
 	private int index;
+	private long fireRate;
 	private boolean following;
 	private Vector currentNode;
 
 	private final int avg;
 	private final Sound shoot;
 	private final List<Vector> path;
-	private final Chronometer fireRate;
 
 	private static final int SCORE = 40;
 	private static final double MASS = 60;
@@ -45,9 +44,8 @@ public class UFO extends MovingObject {
 		this.avg = (width + height) >> 1;
 
 		this.shoot = new Sound(Assets.ufoShoot);
-		
-		this.fireRate = new Chronometer();
-		this.fireRate.run(FIRE_RATE);
+
+		this.fireRate = 0;
 	}
 
 	@Override
@@ -66,7 +64,7 @@ public class UFO extends MovingObject {
 
 		angle += DELTA_ANGLE;
 
-		if (!fireRate.isRunning()) {
+		if (fireRate >= FIRE_RATE) {
 			Vector toPlayer = state.getPlayer().center().sub(center());
 			toPlayer.normalize();
 
@@ -86,15 +84,15 @@ public class UFO extends MovingObject {
 			state.getMovingObjects().add(0, laser);
 
 			shoot.play();
-			
-			fireRate.run(FIRE_RATE);
+
+			fireRate = 0;
 		}
-		
+
 		if (shoot.getFramePosition() > 8500) {
 			shoot.stop();
 		}
 
-		fireRate.update();
+		fireRate += dt;
 
 		checkCollision();
 
